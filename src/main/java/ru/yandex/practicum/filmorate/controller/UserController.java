@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.UserAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Optional;
@@ -46,6 +47,17 @@ public class UserController {
     @GetMapping("/users")
     public HashMap<Integer, User> getUsers() {
         return users;
+    }
+
+    @PostMapping("/users")
+    public User postUser(@Valid @RequestBody User user) {
+        if (users.containsKey(user.getId())) {
+            throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
+        } else {
+            System.out.println("Adding new user:\n" + user.toString());
+            users.put(user.getId(), user);
+            return user;
+        }
     }
 
     private Integer generateId() {
