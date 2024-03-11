@@ -10,11 +10,7 @@ import java.time.LocalDate;
 public class UserValidatorTest {
     @Test
     public void emailValidationTest() {
-        User user = new User(0
-                , ""
-                , "testLogin"
-                , "testName"
-                , LocalDate.of(2000, 1, 1));
+        User user = new User(0, "", "testLogin", "testName", LocalDate.of(2000, 1, 1));
         Assertions.assertFalse(UserValidator.emailValidation(user.getEmail()));
         user.setEmail("aboba-aboba");
         Assertions.assertFalse(UserValidator.emailValidation(user.getEmail()));
@@ -24,11 +20,7 @@ public class UserValidatorTest {
 
     @Test
     public void loginValidationTest() {
-        User user = new User(0
-                , ""
-                , ""
-                , "testName"
-                , LocalDate.of(2000, 1, 1));
+        User user = new User(0, "", "", "testName", LocalDate.of(2000, 1, 1));
         Assertions.assertFalse(UserValidator.loginValidation(user.getLogin()));
         user.setLogin("abo ba");
         Assertions.assertFalse(UserValidator.loginValidation(user.getLogin()));
@@ -36,11 +28,7 @@ public class UserValidatorTest {
 
     @Test
     public void birthdayValidationTest() {
-        User user = new User(0
-                , ""
-                , "testLogin"
-                , "testName"
-                , LocalDate.of(2103, 1, 1));
+        User user = new User(0, "", "testLogin", "testName", LocalDate.of(2103, 1, 1));
         Assertions.assertFalse(UserValidator.birthdayValidation(user.getBirthday()));
     }
 }

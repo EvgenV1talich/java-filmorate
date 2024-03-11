@@ -10,21 +10,13 @@ import java.time.LocalDate;
 public class FilmValidatorTest {
     @Test
     public void filmTitleValidationTest() {
-        Film film = new Film(0
-                , ""
-                , "testDescription"
-                , LocalDate.of(2000, 1, 1)
-                , Duration.ofMinutes(116));
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), Duration.ofMinutes(116));
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
     }
 
     @Test
     public void filmDescriptionValidationTest() {
-        Film film = new Film(0
-                , ""
-                , "testDescription"
-                , LocalDate.of(2000, 1, 1)
-                , Duration.ofMinutes(116));
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), Duration.ofMinutes(116));
         film.setDescription("very looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooo" +
@@ -67,21 +59,13 @@ public class FilmValidatorTest {
 
     @Test
     public void filmReleaseDateValidationTest() {
-        Film film = new Film(0
-                , ""
-                , "testDescription"
-                , LocalDate.of(1670, 1, 1)
-                , Duration.ofMinutes(116));
+        Film film = new Film(0, "", "testDescription", LocalDate.of(1670, 1, 1), Duration.ofMinutes(116));
         Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
 
     @Test
     public void filmDurationValidationTest() {
-        Film film = new Film(0
-                , ""
-                , "testDescription"
-                , LocalDate.of(2000, 1, 1)
-                , Duration.ofMinutes(-1));
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), Duration.ofMinutes(-1));
         Assertions.assertFalse(FilmValidator.filmDurationValidation(film.getDuration()));
     }
 }
