@@ -50,6 +50,9 @@ public class UserController {
 
     @PostMapping("/users")
     public User postUser(@Valid @RequestBody User user) {
+        if (user.getId() == null) {
+            user.setId(generateId());
+        }
         if (users.containsKey(user.getId())) {
             throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
         } else {
