@@ -21,6 +21,7 @@ public class UserValidatorTest {
         user.setEmail("aboba@aboba.ru");
         Assertions.assertTrue(UserValidator.emailValidation(user.getEmail()));
     }
+
     @Test
     public void loginValidationTest() {
         User user = new User(0
@@ -32,6 +33,7 @@ public class UserValidatorTest {
         user.setLogin("abo ba");
         Assertions.assertFalse(UserValidator.loginValidation(user.getLogin()));
     }
+
     @Test
     public void birthdayValidationTest() {
         User user = new User(0

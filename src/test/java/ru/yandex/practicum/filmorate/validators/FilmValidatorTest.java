@@ -17,6 +17,7 @@ public class FilmValidatorTest {
                 , Duration.ofMinutes(116));
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
     }
+
     @Test
     public void filmDescriptionValidationTest() {
         Film film = new Film(0
@@ -63,6 +64,7 @@ public class FilmValidatorTest {
                 "ooooooooooooooooooooooooooooooooooooooooooooooooong description");
         Assertions.assertFalse(FilmValidator.filmDescriptionValidation(film.getDescription()));
     }
+
     @Test
     public void filmReleaseDateValidationTest() {
         Film film = new Film(0
@@ -72,6 +74,7 @@ public class FilmValidatorTest {
                 , Duration.ofMinutes(116));
         Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
+
     @Test
     public void filmDurationValidationTest() {
         Film film = new Film(0
