@@ -51,6 +51,9 @@ public class FilmController {
 
     @PostMapping("/films")
     public Film postFilm(@RequestBody Film film) {
+        if (film.getId() == null) {
+            film.setId(generateId());
+        }
         if (films.containsKey(film.getId())) {
             throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
         } else {
