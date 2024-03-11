@@ -7,8 +7,8 @@ import java.time.LocalDate;
 public abstract class UserValidator {
     public static boolean validate(User user) {
         if (emailValidation(user.getEmail())
-        && loginValidation(user.getLogin())
-        && birthdayValidation(user.getBirthday())) {
+                && loginValidation(user.getLogin())
+                && birthdayValidation(user.getBirthday())) {
             return true;
         } else {
             return false;
@@ -22,6 +22,7 @@ public abstract class UserValidator {
             return true;
         }
     }
+
     public static boolean loginValidation(String login) {
         if (login.isEmpty() || login.contains(" ")) {
             return false;
@@ -29,6 +30,7 @@ public abstract class UserValidator {
             return true;
         }
     }
+
     public static boolean birthdayValidation(LocalDate date) {
         return !date.isAfter(LocalDate.now());
     }
