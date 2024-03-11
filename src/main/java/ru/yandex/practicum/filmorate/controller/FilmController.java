@@ -50,6 +50,17 @@ public class FilmController {
         return films;
     }
 
+    @PostMapping("/films")
+    public Film postFilm(@RequestBody Film film) {
+        if (films.containsKey(film.getId())) {
+            throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
+        } else {
+            System.out.println("Adding new film:\n" + film.toString());
+            films.put(film.getId(), film);
+            return film;
+        }
+    }
+
     private Integer generateId() {
         return generatedId++;
     }
