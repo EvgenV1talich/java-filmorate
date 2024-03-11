@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/filmorate")
 @Slf4j
 public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();

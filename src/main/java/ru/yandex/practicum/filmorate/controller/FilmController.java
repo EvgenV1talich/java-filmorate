@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/filmorate")
 @Slf4j
 public class FilmController {
 
