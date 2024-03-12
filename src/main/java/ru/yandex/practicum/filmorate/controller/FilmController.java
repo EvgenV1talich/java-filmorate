@@ -72,6 +72,21 @@ public class FilmController {
         }
     }
 
+    @PutMapping("/films")
+    public Optional<Film> putFilm(@RequestBody Film film) {
+        if (!FilmValidator.validate(film)) {
+            throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные!");
+        }
+        try {
+            films.replace(film.getId(), film);
+            return Optional.of(film);
+        } catch (FilmNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("Ошибка при обновлении данных фильма");
+        }
+        return Optional.empty();
+    }
+
     private Integer generateId() {
         return generatedId++;
     }
