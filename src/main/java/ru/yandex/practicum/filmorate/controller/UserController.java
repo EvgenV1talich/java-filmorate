@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.UserAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -52,6 +54,10 @@ public class UserController {
     public User postUser(@Valid @RequestBody User user) {
         if (user.getId() == null) {
             user.setId(generateId());
+        }
+        //Validation
+        if (!UserValidator.validate(user)) {
+            throw new UserValidationException("Ошибка валидации пользователя, проверьте данные!");
         }
         if (users.containsKey(user.getId())) {
             throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");

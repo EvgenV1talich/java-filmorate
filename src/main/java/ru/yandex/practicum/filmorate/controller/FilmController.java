@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.FilmAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -53,6 +55,10 @@ public class FilmController {
     public Film postFilm(@RequestBody Film film) {
         if (film.getId() == null) {
             film.setId(generateId());
+        }
+        //Validation
+        if (!FilmValidator.validate(film)) {
+            throw new FilmValidationException("Ошибка валидации, проверьте данные!");
         }
         if (films.containsKey(film.getId())) {
             throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
