@@ -71,11 +71,13 @@ public class UserController {
         }
     }
 
+    @PutMapping("/users")
     public Optional<User> putUser(@Valid @RequestBody User user) {
         if (!UserValidator.validate(user)) {
             throw new UserValidationException("Обишка валидации пользователя. Проверьте данные.");
         }
         try {
+            System.out.println("Updating user:\n" + user.toString());
             users.replace(user.getId(), user);
             return Optional.of(user);
         } catch (UserNotFoundException ex) {
@@ -84,8 +86,6 @@ public class UserController {
         }
         return Optional.empty();
     }
-
-    @PutMapping("/users")
 
     private Integer generateId() {
         return generatedId++;
