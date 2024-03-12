@@ -35,6 +35,9 @@ public class UserController {
 
     @PatchMapping("/update-user/{id}")
     public Optional<User> updateUser(@Valid @RequestBody User user) {
+        if (!UserValidator.validate(user)) {
+            throw new UserValidationException("Обишка валидации пользователя. Проверьте данные.");
+        }
         try {
             users.replace(user.getId(), user);
             return Optional.of(user);

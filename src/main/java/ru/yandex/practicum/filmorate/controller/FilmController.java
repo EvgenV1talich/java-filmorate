@@ -36,6 +36,9 @@ public class FilmController {
 
     @PatchMapping("/update-film/{id}")
     public Optional<Film> updateFilm(@RequestBody Film film) {
+        if (!FilmValidator.validate(film)) {
+            throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные!");
+        }
         try {
             films.replace(film.getId(), film);
             return Optional.of(film);
