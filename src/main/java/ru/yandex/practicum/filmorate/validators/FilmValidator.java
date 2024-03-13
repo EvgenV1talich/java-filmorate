@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.validators;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.time.Duration;
 import java.time.LocalDate;
 
 public abstract class FilmValidator {
@@ -38,8 +39,8 @@ public abstract class FilmValidator {
         return !date.isBefore(minDate);
     }
 
-    public static boolean filmDurationValidation(Integer duration) {
-        return (duration > 0);
+    public static boolean filmDurationValidation(Duration duration) {
+        return !duration.isNegative();
     }
 
 
