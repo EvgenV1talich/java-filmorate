@@ -20,21 +20,6 @@ public class FilmController {
 
     private int generatedId = 1;
 
-    @PatchMapping("/update-film/{id}")
-    public Optional<Film> updateFilm(@RequestBody Film film) {
-        if (!FilmValidator.validate(film)) {
-            throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные!");
-        }
-        try {
-            films.replace(film.getId(), film);
-            return Optional.of(film);
-        } catch (FilmNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("Ошибка при обновлении данных фильма");
-        }
-        return Optional.empty();
-    }
-
     @GetMapping("/films")
     public Collection<Film> getFilms() {
         return films.values();
@@ -49,10 +34,12 @@ public class FilmController {
         if (!FilmValidator.validate(film)) {
             throw new FilmValidationException("Ошибка валидации, проверьте данные!");
         }
+
         if (films.containsKey(film.getId())) {
             throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
         } else {
             System.out.println("Adding new film:\n" + film.toString());
+            System.out.println(film.getDuration());
             films.put(film.getId(), film);
             return film;
         }
@@ -64,6 +51,7 @@ public class FilmController {
             throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные!");
         }
         try {
+            System.out.println("Updating film:\n" + film.toString());
             films.replace(film.getId(), film);
             return Optional.of(films.get(film.getId()));
         } catch (FilmNotFoundException ex) {
