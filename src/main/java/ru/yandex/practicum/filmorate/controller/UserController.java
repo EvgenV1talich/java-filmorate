@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User postUser(@Valid @RequestBody User user) {
+    public User postUser(@RequestBody User user) {
         if (user.getId() == null) {
             user.setId(generateId());
         }
@@ -41,7 +41,7 @@ public class UserController {
             throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
         } else {
             System.out.println("Adding new user:\n" + user.toString());
-            if (user.getName().isBlank()) {
+            if (user.getName() == null) {
                 user.setName(user.getLogin());
             }
             users.put(user.getId(), user);
