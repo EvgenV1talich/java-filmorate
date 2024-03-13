@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -16,41 +17,15 @@ import java.util.Optional;
 @Slf4j
 public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();
-    private int generatedId = 0;
+    private int generatedId = 1;
 
     public String home() {
         return "Filmorate";
     }
 
-    @PostMapping("/add-user")
-    public User addUser(@Valid @RequestBody User user) {
-        if (users.containsKey(user.getId())) {
-            throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
-        } else {
-            System.out.println("Adding new user:\n" + user.toString());
-            users.put(user.getId(), user);
-            return user;
-        }
-    }
-
-    @PatchMapping("/update-user/{id}")
-    public Optional<User> updateUser(@Valid @RequestBody User user) {
-        if (!UserValidator.validate(user)) {
-            throw new UserValidationException("Обишка валидации пользователя. Проверьте данные.");
-        }
-        try {
-            users.replace(user.getId(), user);
-            return Optional.of(user);
-        } catch (UserNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("Ошибка при обновлении данных пользователя");
-        }
-        return Optional.empty();
-    }
-
     @GetMapping("/users")
-    public HashMap<Integer, User> getUsers() {
-        return users;
+    public Collection<User> getUsers() {
+        return users.values();
     }
 
     @PostMapping("/users")
@@ -74,7 +49,7 @@ public class UserController {
     @PutMapping("/users")
     public Optional<User> putUser(@Valid @RequestBody User user) {
         if (!UserValidator.validate(user)) {
-            throw new UserValidationException("Обишка валидации пользователя. Проверьте данные.");
+            throw new UserValidationException("Ошибка валидации пользователя. Проверьте данные.");
         }
         try {
             System.out.println("Updating user:\n" + user.toString());
