@@ -3,9 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.*;
 import java.time.LocalDate;
 
-/**
- * Film.
- */
 @Data
 @AllArgsConstructor
 public class Film {
