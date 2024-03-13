@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -17,22 +18,7 @@ public class FilmController {
 
     HashMap<Integer, Film> films = new HashMap<>();
 
-    private int generatedId = 0;
-
-    public String home() {
-        return "Filmorate";
-    }
-
-    @PostMapping("/add-film")
-    public Film addFilm(@RequestBody Film film) {
-        if (films.containsKey(film.getId())) {
-            throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
-        } else {
-            System.out.println("Adding new film:\n" + film.toString());
-            films.put(film.getId(), film);
-            return film;
-        }
-    }
+    private int generatedId = 1;
 
     @PatchMapping("/update-film/{id}")
     public Optional<Film> updateFilm(@RequestBody Film film) {
@@ -50,8 +36,8 @@ public class FilmController {
     }
 
     @GetMapping("/films")
-    public HashMap<Integer, Film> getFilms() {
-        return films;
+    public Collection<Film> getFilms() {
+        return films.values();
     }
 
     @PostMapping("/films")
