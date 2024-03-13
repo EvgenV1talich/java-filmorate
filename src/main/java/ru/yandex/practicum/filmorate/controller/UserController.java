@@ -57,7 +57,7 @@ public class UserController {
         try {
             System.out.println("Updating user:\n" + user.toString());
             users.replace(user.getId(), user);
-            return Optional.of(user);
+            return Optional.of(users.get(user.getId()));
         } catch (UserNotFoundException ex) {
             System.out.println(ex.getMessage());
             System.out.println("Ошибка при обновлении данных пользователя");

@@ -65,7 +65,7 @@ public class FilmController {
         }
         try {
             films.replace(film.getId(), film);
-            return Optional.of(film);
+            return Optional.of(films.get(film.getId()));
         } catch (FilmNotFoundException ex) {
             System.out.println(ex.getMessage());
             System.out.println("Ошибка при обновлении данных фильма");
