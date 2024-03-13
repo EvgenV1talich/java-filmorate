@@ -41,6 +41,9 @@ public class UserController {
             throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
         } else {
             System.out.println("Adding new user:\n" + user.toString());
+            if (user.getName().isBlank()) {
+                user.setName(user.getLogin());
+            }
             users.put(user.getId(), user);
             return user;
         }
