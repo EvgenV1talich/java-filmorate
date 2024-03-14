@@ -33,14 +33,14 @@ public class UserController {
         if (user.getId() == null) {
             user.setId(generateId());
         }
-        //Validation
         if (!UserValidator.validate(user)) {
+            log.error("Ошибка валидации пользователя при запросе POST /users");
             throw new UserValidationException("Ошибка валидации пользователя, проверьте данные!");
         }
         if (users.containsKey(user.getId())) {
+            log.error("Ошибка добавления пользователя при запросе POST /users");
             throw new UserAlreadyExistsException("Пользователь с таким ID уже существует!");
         } else {
-            System.out.println("Adding new user:\n" + user.toString());
             if (user.getName() == null) {
                 user.setName(user.getLogin());
             }
@@ -52,14 +52,15 @@ public class UserController {
     @PutMapping("/users")
     public Optional<User> putUser(@Valid @RequestBody User user) {
         if (!UserValidator.validate(user)) {
+            log.error("Ошибка валидации пользователя при запросе PUT /users");
             throw new UserValidationException("Ошибка валидации пользователя. Проверьте данные.");
         }
         try {
-            System.out.println("Updating user:\n" + user.toString());
             users.replace(user.getId(), user);
             return Optional.of(users.get(user.getId()));
         } catch (UserNotFoundException ex) {
             System.out.println(ex.getMessage());
+            log.error("Ошибка обновления пользователя при запросе POST /users");
             System.out.println("Ошибка при обновлении данных пользователя");
         }
         return Optional.empty();
@@ -67,14 +68,6 @@ public class UserController {
 
     private Integer generateId() {
         return generatedId++;
-    }
-
-    private void resetId() {
-        generatedId = 0;
-    }
-
-    private Integer getLastGeneratedId() {
-        return generatedId;
     }
 
 }

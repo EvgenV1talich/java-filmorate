@@ -30,15 +30,14 @@ public class FilmController {
         if (film.getId() == null) {
             film.setId(generateId());
         }
-        //Validation
         if (!FilmValidator.validate(film)) {
+            log.error("Ошибка валидации фильма при запросе POST /films");
             throw new FilmValidationException("Ошибка валидации, проверьте данные!");
         }
-
         if (films.containsKey(film.getId())) {
+            log.error("Ошибка добавления фильма при запросе POST /films");
             throw new FilmAlreadyExistsException("Фильм с таким ID уже существует!");
         } else {
-            System.out.println("Adding new film:\n" + film.toString());
             System.out.println(film.getDuration());
             films.put(film.getId(), film);
             return film;
@@ -48,14 +47,15 @@ public class FilmController {
     @PutMapping("/films")
     public Optional<Film> putFilm(@RequestBody Film film) {
         if (!FilmValidator.validate(film)) {
+            log.error("Ошибка валидации фильма при запросе PUT /films");
             throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные!");
         }
         try {
-            System.out.println("Updating film:\n" + film.toString());
             films.replace(film.getId(), film);
             return Optional.of(films.get(film.getId()));
         } catch (FilmNotFoundException ex) {
             System.out.println(ex.getMessage());
+            log.error("Ошибка обновления фильма при запросе PUT /films");
             System.out.println("Ошибка при обновлении данных фильма");
         }
         return Optional.empty();
@@ -65,11 +65,4 @@ public class FilmController {
         return generatedId++;
     }
 
-    private void resetId() {
-        generatedId = 0;
-    }
-
-    private Integer getLastGeneratedId() {
-        return generatedId;
-    }
 }
