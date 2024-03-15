@@ -19,10 +19,6 @@ public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();
     private int generatedId = 1;
 
-    public String home() {
-        return "Filmorate";
-    }
-
     @GetMapping("/users")
     public Collection<User> getUsers() {
         return users.values();
@@ -30,12 +26,12 @@ public class UserController {
 
     @PostMapping("/users")
     public User postUser(@RequestBody User user) {
-        if (user.getId() == null) {
-            user.setId(generateId());
-        }
         if (!UserValidator.validate(user)) {
             log.error("Ошибка валидации пользователя при запросе POST /users");
             throw new UserValidationException("Ошибка валидации пользователя, проверьте данные!");
+        }
+        if (user.getId() == null) {
+            user.setId(generateId());
         }
         if (users.containsKey(user.getId())) {
             log.error("Ошибка добавления пользователя при запросе POST /users");

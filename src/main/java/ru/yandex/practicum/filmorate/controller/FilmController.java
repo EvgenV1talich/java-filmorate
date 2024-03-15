@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 public class FilmController {
 
-    HashMap<Integer, Film> films = new HashMap<>();
+    private final HashMap<Integer, Film> films = new HashMap<>();
 
     private int generatedId = 1;
 
@@ -27,12 +27,12 @@ public class FilmController {
 
     @PostMapping("/films")
     public Film postFilm(@RequestBody Film film) {
-        if (film.getId() == null) {
-            film.setId(generateId());
-        }
         if (!FilmValidator.validate(film)) {
             log.error("Ошибка валидации фильма при запросе POST /films");
             throw new FilmValidationException("Ошибка валидации, проверьте данные!");
+        }
+        if (film.getId() == null) {
+            film.setId(generateId());
         }
         if (films.containsKey(film.getId())) {
             log.error("Ошибка добавления фильма при запросе POST /films");
