@@ -15,7 +15,7 @@ public class FilmValidatorTest {
     @Test
     public void filmDescriptionValidationTest() {
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111);
-        film.setDescription("very looooooooooooo" +
+        film.setDescription("looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooo" +
                 "oooooooooooooooooooooooooooooooooooooo" +
@@ -27,30 +27,6 @@ public class FilmValidatorTest {
                 "ooooooooooooooooooooooooooooooooooooooo" +
                 "oooooooooooooooooooooooooooooooooooooo" +
                 "oooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooooo" +
-                "oooooooooooooooooooooooooooooooooooooooooooo" +
-                "ooooooooooooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooooooooooooooooong description");
         Assertions.assertFalse(FilmValidator.filmDescriptionValidation(film.getDescription()));
     }

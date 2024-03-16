@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
-public abstract class UserValidator {
+public class UserValidator {
     public static boolean validate(User user) {
         return emailValidation(user.getEmail())
                 && loginValidation(user.getLogin())

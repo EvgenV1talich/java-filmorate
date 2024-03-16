@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 
-public abstract class FilmValidator {
+public class FilmValidator {
 
     public static boolean validate(Film film) {
         return filmTitleValidation(film.getName())
