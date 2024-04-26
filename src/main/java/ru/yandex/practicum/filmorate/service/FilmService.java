@@ -6,16 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -36,11 +31,13 @@ public class FilmService {
         }
         filmStorage.getFilm(filmId).addLike(userId);
     }
+
     public void removeLikeToFilm(Integer filmId, Integer userId) {
         Film film = filmStorage.getFilm(filmId);
         User user = userStorage.getUser(userId);
         film.removeLike(user.getId());
     }
+
     public List<Film> getMostPopularFilms(Integer count) {
         List<Film> films = (List<Film>) filmStorage.getFilms();
         return (List<Film>) films.stream()

@@ -27,6 +27,7 @@ public class UserController {
     private int generatedId = 1;
     private final UserService userService;
     private final InMemoryUserStorage userStorage;
+
     @Autowired
     public UserController(UserService userService, InMemoryUserStorage userStorage) {
         this.userService = userService;
@@ -72,15 +73,6 @@ public class UserController {
             userService.getUserStorage().getUsers().replace(user.getId(), user);
             return Optional.of(userService.getUserStorage().getUsers().get(user.getId()));
         }
-
-//        try {
-//            users.replace(user.getId(), user);
-//            return Optional.of(users.get(user.getId()));
-//        } catch (UserNotFoundException ex) {
-//            System.out.println(ex.getMessage());
-//            log.error("Ошибка обновления пользователя при запросе POST /users");
-//            System.out.println("Ошибка при обновлении данных пользователя");
-//        }
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")

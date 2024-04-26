@@ -1,19 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
 @Data
 public class User {
     private Integer id;
-    @Email private String email;
+    @Email
+    private String email;
     private String login;
     private String name;
     private LocalDate birthday;
@@ -26,12 +24,14 @@ public class User {
         this.name = name;
         this.birthday = birthday;
     }
+
     public void addFriend(Long userId) {
         if (friends.contains(userId)) {
             return;
         }
         friends.add(userId);
     }
+
     public void removeFriend(Long userId) {
         if (!friends.contains(userId)) {
             return;

@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.FilmAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.UserAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,10 +12,11 @@ import java.util.TreeSet;
 
 @Slf4j
 @Component
-public class InMemoryUserStorage  implements UserStorage {
+public class InMemoryUserStorage implements UserStorage {
     private final HashMap<Integer, User> users = new HashMap<>();
     private final Set<Integer> userIds = new TreeSet<>();
     private Integer lastGeneratedId;
+
     @Override
     public void createUser(User user) {
         generateId(user);
@@ -54,11 +53,13 @@ public class InMemoryUserStorage  implements UserStorage {
 
     @Override
     public User getUser(Integer userId) {
-                return users.get(userId);
+        return users.get(userId);
     }
+
     public boolean containsId(Integer id) {
         return users.containsKey(id);
     }
+
     @Override
     public HashMap<Integer, User> getUsers() {
         return users;

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
@@ -95,18 +96,21 @@ public class Film {
         }
         likesFromUsers.add(Long.valueOf(userId));
     }
+
     public void removeLike(Integer userId) {
         if (!likesFromUsers.contains(userId)) {
             return;
         }
         likesFromUsers.remove(userId);
     }
+
     public static final Comparator<Film> compareByLikes = new Comparator<Film>() {
         @Override
         public int compare(Film o1, Film o2) {
             return Integer.compare(o1.getLikes(), o2.getLikes());
         }
     };
+
     public int getLikes() {
         if (likesFromUsers.isEmpty()) {
             return 0;
@@ -114,6 +118,7 @@ public class Film {
             return likesFromUsers.size();
         }
     }
+
     public void setDuration(Integer duration) {
         this.duration = duration;
     }

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.UserAlreadyExistsException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
@@ -16,7 +15,7 @@ import java.util.TreeSet;
 @Component
 @Slf4j
 @Getter
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private final HashMap<Integer, Film> films = new HashMap<>();
     private Integer lastGeneratedId = 1;
     private final Set<Integer> filmIds = new TreeSet<>();
@@ -35,6 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage{
             throw new FilmAlreadyExistsException("Ошибка добавления фильма");
         }
     }
+
     @Override
     public void updateFilm(Film film) {
         try {
@@ -61,15 +61,19 @@ public class InMemoryFilmStorage implements FilmStorage{
     public Film getFilm(Integer filmId) {
         return films.get(filmId);
     }
+
     public boolean containsId(Integer id) {
         return films.containsKey(id);
     }
+
     public boolean containsFilm(Integer filmId) {
         return films.containsKey(filmId);
     }
+
     public Collection<Film> getFilms() {
         return films.values();
     }
+
     private Integer generateId() {
         return lastGeneratedId++;
     }

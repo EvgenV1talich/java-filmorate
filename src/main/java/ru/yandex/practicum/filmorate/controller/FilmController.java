@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class FilmController {
 
     private final InMemoryFilmStorage filmStorage;
     private final FilmService filmService;
+
     @Autowired
     public FilmController(InMemoryFilmStorage filmStorage, FilmService filmService) {
         this.filmStorage = filmStorage;
@@ -65,6 +67,7 @@ public class FilmController {
     public void addLikeToFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         filmService.addLikeToFilm(userId, id);
     }
+
     @DeleteMapping("films/{id}/like/{userId}")
     public void removeLikeFromFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         filmService.removeLikeToFilm(id, userId);
@@ -74,7 +77,7 @@ public class FilmController {
     public List<Film> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
         if (count.isEmpty()) {
             return filmService.getMostPopularFilms(10);
-        } else if (count.get() > filmStorage.getFilms().size()){
+        } else if (count.get() > filmStorage.getFilms().size()) {
             throw new FilmNotFoundException("Некорректный запрос, такого кол-ва фильмов нет!");
         } else {
             return filmService.getMostPopularFilms(count.get());

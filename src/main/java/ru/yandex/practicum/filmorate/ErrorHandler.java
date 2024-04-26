@@ -20,21 +20,25 @@ public class ErrorHandler {
     public Map<String, String> handleUserValidationException(final UserValidationException ex) {
         return Map.of("error", "Ошибка валидации пользователя.");
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleFilmValidationException(final FilmValidationException ex) {
         return Map.of("error", "Ошибка валидации пользователя.");
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> UserNotFoundException(final UserNotFoundException ex) {
         return Map.of("error", "Пользователь не найден");
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> FilmNotFoundException(final FilmNotFoundException ex) {
         return Map.of("error", "Фильм не найден");
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> UserUnknownIdException(final UserUnknownIdException ex) {
