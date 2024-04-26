@@ -29,25 +29,20 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> UserNotFoundException(final UserNotFoundException ex) {
+    public Map<String, String> userNotFoundException(final UserNotFoundException ex) {
         return Map.of("error", "Пользователь не найден");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> FilmNotFoundException(final FilmNotFoundException ex) {
+    public Map<String, String> filmNotFoundException(final FilmNotFoundException ex) {
         return Map.of("error", "Фильм не найден");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> UserUnknownIdException(final UserUnknownIdException ex) {
+    public Map<String, String> userUnknownIdException(final UserUnknownIdException ex) {
         return Map.of("error", "Такого ID не существует");
     }
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public Map<String, String> InternalException(final RuntimeException ex) {
-//        return Map.of("error", "Ошибка валидации пользователя.");
-//    }
 
 }
