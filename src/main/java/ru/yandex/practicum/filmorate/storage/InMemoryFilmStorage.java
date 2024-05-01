@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exceptions.FilmAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
@@ -70,8 +69,8 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.containsKey(filmId);
     }
 
-    public Collection<Film> getFilms() {
-        return films.values();
+    public HashMap<Integer, Film> getFilms() {
+        return films;
     }
 
     private Integer generateId() {

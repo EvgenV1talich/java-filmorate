@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 @Data
 public class User {
-    private Integer id;
+    private Long id;
     @Email
     private String email;
     private String login;
@@ -17,7 +17,7 @@ public class User {
     private LocalDate birthday;
     private Set<Long> friends = new TreeSet<>();
 
-    public User(Integer id, String email, String login, String name, LocalDate birthday) {
+    public User(Long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
         this.email = email;
         this.login = login;

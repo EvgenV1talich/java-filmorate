@@ -6,16 +6,18 @@ import ru.yandex.practicum.filmorate.exceptions.UserAlreadyExistsException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final HashMap<Integer, User> users = new HashMap<>();
-    private final Set<Integer> userIds = new TreeSet<>();
-    private Integer lastGeneratedId;
+    private final HashMap<Long, User> users = new HashMap<>();
+    private final Set<Long> userIds = new TreeSet<>();
+    private Long lastGeneratedId = 1L;
 
     @Override
     public void createUser(User user) {
@@ -40,7 +42,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUser(Integer userId) {
+    public void deleteUser(Long userId) {
         try {
             log.info("Trying to delete user (userId = " + userId + ")");
             users.remove(userId);
@@ -52,25 +54,33 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUser(Integer userId) {
+    public User getUser(Long userId) {
         return users.get(userId);
     }
 
-    public boolean containsId(Integer id) {
+    public boolean containsId(Long id) {
         return users.containsKey(id);
     }
-
-    @Override
-    public HashMap<Integer, User> getUsers() {
+    public HashMap<Long, User> getUsersMap() {
         return users;
     }
 
+    @Override
+    public List<User> getUsers() {
+        List<User> usersList = new ArrayList<>();
+        usersList.addAll(users.values());
+        return usersList;
+    }
+    public Set<Long> getUserIds() {
+        return userIds;
+    }
+
     private void generateId(User user) {
-        if (!(user.getId() == null)) {
+        if (user.getId() != null && userIds.contains(user.getId())) {
             throw new UserAlreadyExistsException("Ошибка генерации id (id уже существует)");
         }
-        user.setId(lastGeneratedId);
-        log.debug("new userId = " + lastGeneratedId + " was generated!");
-        userIds.add(lastGeneratedId++);
+        user.setId(lastGeneratedId++);
+        log.debug("new userId = " + user.getId() + " was generated!");
+        userIds.add(user.getId());
     }
 }

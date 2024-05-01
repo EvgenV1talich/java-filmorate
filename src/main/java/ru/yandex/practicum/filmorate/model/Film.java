@@ -90,14 +90,15 @@ public class Film {
         return duration;
     }
 
-    public void addLike(Integer userId) {
+    public void addLike(Long userId) {
         if (likesFromUsers.contains(userId)) {
             return;
         }
-        likesFromUsers.add(Long.valueOf(userId));
+
+        likesFromUsers.add(userId);
     }
 
-    public void removeLike(Integer userId) {
+    public void removeLike(Long userId) {
         if (!likesFromUsers.contains(userId)) {
             return;
         }
