@@ -45,6 +45,7 @@ public class ErrorHandler {
     public Map<String, String> userUnknownIdException(final UserUnknownIdException ex) {
         return Map.of("error", "Такого ID не существует");
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> filmsCountException(final FilmsCountException ex) {
