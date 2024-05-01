@@ -61,6 +61,7 @@ public class InMemoryUserStorage implements UserStorage {
     public boolean containsId(Long id) {
         return users.containsKey(id);
     }
+
     public HashMap<Long, User> getUsersMap() {
         return users;
     }
@@ -71,6 +72,7 @@ public class InMemoryUserStorage implements UserStorage {
         usersList.addAll(users.values());
         return usersList;
     }
+
     public Set<Long> getUserIds() {
         return userIds;
     }
