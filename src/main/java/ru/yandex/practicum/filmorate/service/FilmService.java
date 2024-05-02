@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
@@ -19,15 +20,17 @@ public class FilmService {
     private final InMemoryFilmStorage filmStorage;
     private final InMemoryUserStorage userStorage;
 
-    @Autowired
-    public FilmService(InMemoryFilmStorage filmStorage, InMemoryUserStorage userStorage) {
+    public FilmService(@Autowired InMemoryFilmStorage filmStorage,@Autowired InMemoryUserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
     }
 
     public void addLikeToFilm(Long userId, Integer filmId) {
         if (!userStorage.containsId(userId) || !filmStorage.containsFilm(filmId)) {
-            throw new FilmNotFoundException("Фильм или пользователь с таким ID не найден!");
+            throw new FilmNotFoundException("Фильм с таким ID не найден!");
+        }
+        if (!userStorage.containsId(userId)) {
+            throw new UserNotFoundException("Пользователь с таким ID не найден!");
         }
         Film newFilm = filmStorage.getFilm(filmId);
         newFilm.addLike(userId);
@@ -42,10 +45,6 @@ public class FilmService {
 
     public List<Film> getMostPopularFilms(Integer count) {
         Collection<Film> films = filmStorage.getFilms().values();
-        /*return (List<Film>) films.stream()
-                .sorted(Film.compareByLikes.reversed())
-                .limit(count)
-                .collect(Collectors.toList());*/
         return films.stream()
                 .sorted((a, b) -> b.getLikes() - a.getLikes())
                 .limit(count)
