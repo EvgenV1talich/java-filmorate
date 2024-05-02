@@ -26,7 +26,7 @@ public class FilmService {
     }
 
     public void addLikeToFilm(Long userId, Integer filmId) {
-        if (!userStorage.containsId(userId) || !filmStorage.containsFilm(filmId)) {
+        if (!filmStorage.containsFilm(filmId)) {
             throw new FilmNotFoundException("Фильм с таким ID не найден!");
         }
         if (!userStorage.containsId(userId)) {
