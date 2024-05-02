@@ -25,11 +25,27 @@ public class InMemoryFilmStorage implements FilmStorage {
             film.setId(generateId());
         }
         try {
-            log.info(String.format("Trying to create film (id = %d)"), film.getId());
+            StringBuilder builder = new StringBuilder();
+            log.info(builder
+                    .append("Trying to create film (id = ")
+                    .append(film.getId())
+                    .append(")")
+                    .toString());
             films.put(film.getId(), film);
-            log.info(String.format("Film created successfully (id = %d)"), film.getId());
+            builder = new StringBuilder();
+            log.info(builder
+                    .append("Film created successfully (id = ")
+                    .append(film.getId())
+                    .append(")")
+                    .toString());
+
         } catch (FilmAlreadyExistsException ex) {
-            log.error(String.format("Error when creating new film (filmId = %d)"), film.getId());
+            StringBuilder builder = new StringBuilder();
+            log.error(builder
+                    .append("Error when creating new film (filmId = ")
+                    .append(film.getId())
+                    .append(")")
+                    .toString());
             throw new FilmAlreadyExistsException("Ошибка добавления фильма");
         }
     }
@@ -37,7 +53,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void updateFilm(Film film) {
         try {
-            log.info(String.format("Trying to update film {id = %d"), film.getId());
+            StringBuilder builder = new StringBuilder();
+            log.info(builder
+                    .append("Trying to update film {id = ")
+                    .append(film.getId())
+                    .append(")")
+                    .toString());
             films.replace(film.getId(), film);
         } catch (FilmNotFoundException ex) {
             log.error("Ошибка обновления фильма");
@@ -51,7 +72,12 @@ public class InMemoryFilmStorage implements FilmStorage {
             filmIds.remove(filmId);
             films.remove(filmId);
         } catch (FilmNotFoundException ex) {
-            log.error(String.format("Error when delete film (id = %d)"), filmId);
+            StringBuilder builder = new StringBuilder();
+            log.error(builder
+                    .append("Error when delete film (id = ")
+                    .append(filmId)
+                    .append(")")
+                    .toString());
             throw new FilmNotFoundException("Ошибка при удалении фильма");
         }
     }

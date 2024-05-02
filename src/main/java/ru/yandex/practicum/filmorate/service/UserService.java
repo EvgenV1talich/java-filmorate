@@ -69,7 +69,7 @@ public class UserService {
     public List<User> getSameFriendsList(Long user1Id, Long user2Id) {
         User user1 = userStorage.getUser(user1Id);
         User user2 = userStorage.getUser(user2Id);
-        log.debug(String.format("Trying to return same friends list for User1Id = %d and User2Id = %d"), user1.getId(), user2.getId());
+        log.debug("Trying to return same friends list for User1Id = " + user1.getId() + " and User2Id = " + user2.getId());
         List<User> sameFriendsList = new ArrayList<>();
         List<Long> sameFriendsIdList = user1.getFriends().stream()
                 .distinct()

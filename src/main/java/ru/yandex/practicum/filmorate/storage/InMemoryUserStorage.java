@@ -23,10 +23,10 @@ public class InMemoryUserStorage implements UserStorage {
     public void createUser(User user) {
         generateId(user);
         try {
-            log.info(String.format("Trying to create user (id = %d)"), user.getId());
+            log.info("Trying to create user (id = " + user.getId());
             users.put(user.getId(), user);
         } catch (UserAlreadyExistsException ex) {
-            log.error(String.format("Error when creating new user (userId = %d)"), user.getId());
+            log.error("Error when creating new user (userId = " + user.getId() + ")");
             throw new UserAlreadyExistsException("Ошибка добавления пользователя");
         }
     }
@@ -44,13 +44,13 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void deleteUser(Long userId) {
         try {
-            log.info(String.format("Trying to delete user (userId = %d"), userId);
+            log.info("Trying to delete user (userId = " + userId + ")");
             users.remove(userId);
         } catch (RuntimeException ex) {
             log.info("Error when delete user");
             throw new RuntimeException("Error when delete user");
         }
-        log.info(String.format("User %d successfully created!"), userId);
+        log.info("User " + userId + " successfully created!");
     }
 
     @Override
@@ -79,10 +79,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     private void generateId(User user) {
         if (user.getId() != null && userIds.contains(user.getId())) {
-            throw new UserAlreadyExistsException("Ошибка генерации id");
+            throw new UserAlreadyExistsException("Ошибка генерации id (id уже существует)");
         }
         user.setId(lastGeneratedId++);
-        log.debug(String.format("new userId = %d was generated!"), user.getId());
+        log.debug("new userId = " + user.getId() + " was generated!");
         userIds.add(user.getId());
     }
 }
