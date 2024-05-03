@@ -1,8 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
-import java.time.LocalDate;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+
+
+@Getter
+@Setter
 public class Film {
 
     private Integer id;
@@ -10,6 +19,7 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
+    private Set<Long> likesFromUsers;
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
         this.id = id;
@@ -17,6 +27,7 @@ public class Film {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.likesFromUsers = new TreeSet<Long>();
     }
 
     @Override
@@ -77,6 +88,36 @@ public class Film {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    public void addLike(Long userId) {
+        if (likesFromUsers.contains(userId)) {
+            return;
+        }
+
+        likesFromUsers.add(userId);
+    }
+
+    public void removeLike(Long userId) {
+        if (!likesFromUsers.contains(userId)) {
+            return;
+        }
+        likesFromUsers.remove(userId);
+    }
+
+    public static final Comparator<Film> compareByLikes = new Comparator<Film>() {
+        @Override
+        public int compare(Film o1, Film o2) {
+            return Integer.compare(o1.getLikes(), o2.getLikes());
+        }
+    };
+
+    public int getLikes() {
+        if (likesFromUsers.isEmpty()) {
+            return 0;
+        } else {
+            return likesFromUsers.size();
+        }
     }
 
     public void setDuration(Integer duration) {
