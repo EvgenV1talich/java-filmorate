@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.util.TreeSet;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Film {
 
     private Integer id;
@@ -21,14 +23,23 @@ public class Film {
     private LocalDate releaseDate;
     private Integer duration;
     private ArrayList<Genre> genre;
+    private MPA mpa;
     private Set<Long> likesFromUsers;
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
+    public Film(Integer id,
+                String name,
+                String description,
+                LocalDate releaseDate,
+                Integer duration,
+                ArrayList<Genre> genre,
+                MPA mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.genre = genre;
+        this.mpa = mpa;
         this.likesFromUsers = new TreeSet<Long>();
     }
 

@@ -6,21 +6,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Genre {
+public class MPA {
 
     private Integer id;
-    private String name;
+    private String rate;
 
-    public Genre(Integer id, String name) {
+    public MPA(Integer id, String rate) {
         this.id = id;
-        this.name = name;
+        this.rate = rate;
     }
 
     @Override
     public String toString() {
-        return "Genre{" +
+        return "MPA{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", rate='" + rate + '\'' +
                 '}';
     }
 }
