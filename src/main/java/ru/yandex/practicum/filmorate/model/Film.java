@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
+    private ArrayList<Genre> genre;
     private Set<Long> likesFromUsers;
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
