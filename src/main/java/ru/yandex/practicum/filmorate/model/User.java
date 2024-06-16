@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -16,6 +17,7 @@ public class User {
     private String name;
     private LocalDate birthday;
     private Set<Long> friends = new TreeSet<>();
+    private ArrayList<FriendRequest> requests;
 
     public User(Long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;
