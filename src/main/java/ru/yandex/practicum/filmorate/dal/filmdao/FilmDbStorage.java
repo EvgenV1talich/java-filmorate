@@ -1,11 +1,10 @@
-package ru.yandex.practicum.filmorate.storage.dao;
+package ru.yandex.practicum.filmorate.dal.filmdao;
 
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.HashMap;
 
-public class FilmDbStorage implements FilmStorage {
+public class FilmDbStorage implements FilmStorage{
     @Override
     public void createFilm(Film film) {
 

@@ -8,8 +8,8 @@ import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.dal.filmdao.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.dal.userdao.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import java.util.Collection;

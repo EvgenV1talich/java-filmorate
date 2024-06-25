@@ -1,6 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
@@ -9,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Data
+@NoArgsConstructor
 public class User {
     private Long id;
     @Email
