@@ -3,9 +3,10 @@ package ru.yandex.practicum.filmorate.dal.filmdao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public interface FilmStorage {
-    void createFilm(Film film);
+    Map<String, Object> createFilm(Film film);
 
     void updateFilm(Film film);
 

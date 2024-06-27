@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,7 +21,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Set<Integer> filmIds = new TreeSet<>();
 
     @Override
-    public void createFilm(Film film) {
+    public Map<String, Object> createFilm(Film film) {
         if (film.getId() == null) {
             film.setId(generateId());
         }
@@ -48,6 +49,7 @@ public class InMemoryFilmStorage implements FilmStorage {
                     .toString());
             throw new FilmAlreadyExistsException("Ошибка добавления фильма");
         }
+        return null;
     }
 
     @Override

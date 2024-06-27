@@ -16,6 +16,9 @@ public class Genre {
         this.name = name;
     }
 
+    public Genre() {
+    }
+
     @Override
     public String toString() {
         return "Genre{" +

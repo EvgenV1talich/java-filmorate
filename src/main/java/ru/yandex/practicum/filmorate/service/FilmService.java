@@ -1,37 +1,33 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.dal.filmdao.FilmDbStorage;
+import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.dal.filmdao.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.dal.userdao.InMemoryUserStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FilmService {
 
-    private final InMemoryFilmStorage filmStorage;
-    private final InMemoryUserStorage userStorage;
+    private final FilmDbStorage filmStorage;
+    private final UserDbStorage userStorage;
 
-    public FilmService(@Autowired InMemoryFilmStorage filmStorage,@Autowired InMemoryUserStorage userStorage) {
-        this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
-    }
 
     public void addLikeToFilm(Long userId, Integer filmId) {
-        if (!filmStorage.containsFilm(filmId)) {
-            throw new FilmNotFoundException("Фильм с таким ID не найден!");
-        }
-        if (!userStorage.containsId(userId)) {
-            throw new UserNotFoundException("Пользователь с таким ID не найден!");
-        }
         Film newFilm = filmStorage.getFilm(filmId);
         newFilm.addLike(userId);
         filmStorage.updateFilm(newFilm);
@@ -49,6 +45,25 @@ public class FilmService {
                 .sorted((a, b) -> b.getLikes() - a.getLikes())
                 .limit(count)
                 .collect(Collectors.toList());
+    }
+    public Collection<Film> getFilms() {
+        return (filmStorage.getFilms().values());
+    }
+    public Film createFilm(Film film) {
+        filmStorage.createFilm(film);
+        return film;
+    }
+    public boolean containsFilm(Integer id) {
+        return (filmStorage.contains(id));
+    }
+    public void updateFilm(Film film) {
+        filmStorage.updateFilm(film);
+    }
+    public Film getFilm(Integer id) {
+        return filmStorage.getFilm(id);
+    }
+    public Integer getFilmsCount() {
+        return filmStorage.getCount();
     }
 
 }

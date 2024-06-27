@@ -20,13 +20,12 @@ import java.util.Optional;
 @Slf4j
 public class FilmController {
 
-    private final InMemoryFilmStorage filmStorage;
     private final FilmService filmService;
+    //TODO: переписать на userService
     private final InMemoryUserStorage userStorage;
 
     @Autowired
-    public FilmController(InMemoryFilmStorage filmStorage, FilmService filmService, InMemoryUserStorage userStorage) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService, InMemoryUserStorage userStorage) {
         this.filmService = filmService;
         this.userStorage = userStorage;
     }
@@ -34,7 +33,7 @@ public class FilmController {
 
     @GetMapping("/films")
     public Collection<Film> getFilms() {
-        return filmStorage.getFilms().values();
+        return filmService.getFilms();
     }
 
     @PostMapping("/films")
@@ -43,7 +42,7 @@ public class FilmController {
             log.error("Ошибка валидации фильма при запросе POST /films");
             throw new FilmValidationException("Ошибка валидации фильма, проверьте данные!");
         }
-        filmStorage.createFilm(film);
+        filmService.createFilm(film);
         return film;
     }
 
@@ -53,11 +52,11 @@ public class FilmController {
             log.error("Ошибка валидации фильма при запросе PUT /users");
             throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные.");
         }
-        if (!filmStorage.containsFilm(film.getId())) {
+        if (!filmService.containsFilm(film.getId())) {
             throw new FilmNotFoundException("Такой фильм не найден!");
         } else {
-            filmStorage.getFilms().replace(film.getId(), film);
-            return Optional.of(filmStorage.getFilms().get(film.getId()));
+            filmService.updateFilm(film);
+            return Optional.ofNullable(filmService.getFilm(film.getId()));
         }
     }
 
@@ -68,7 +67,7 @@ public class FilmController {
 
     @DeleteMapping("films/{id}/like/{userId}")
     public void removeLikeFromFilm(@PathVariable Integer id, @PathVariable Long userId) {
-        if (!filmStorage.containsFilm(id)) {
+        if (!filmService.containsFilm(id)) {
             throw new FilmNotFoundException("Фильм с таким ID не найден!");
         } else if (!userStorage.containsId(userId)) {
             throw new UserNotFoundException("Пользователь с таким ID не найден!");
@@ -81,8 +80,8 @@ public class FilmController {
     public List<Film> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
         if (count.isEmpty()) {
             return filmService.getMostPopularFilms(10);
-        } else if (count.get() > filmStorage.getFilms().size()) {
-            return filmService.getMostPopularFilms(filmStorage.getFilms().size());
+        } else if (count.get() > filmService.getFilmsCount()) {
+            return filmService.getMostPopularFilms(filmService.getFilmsCount());
         } else {
             return filmService.getMostPopularFilms(count.get());
         }
