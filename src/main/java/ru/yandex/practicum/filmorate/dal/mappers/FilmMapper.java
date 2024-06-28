@@ -1,49 +1,18 @@
-package ru.yandex.practicum.filmorate.dal.mappers;
+package ru.yandex.practicum.filmorate.mapper;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import ru.yandex.practicum.filmorate.model.Film;
+
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
-public class FilmMapper implements RowMapper<Film> {
+public class FilmMapper {
 
-    MpaDbStorage mpaDbStorage;
-    @Override
-    public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Film film = new Film();
-        film.setId(rs.getInt("ID"));
-        film.setName(rs.getString("NAME"));
-        film.setDescription(rs.getString("DESCRIPTION"));
-        film.setReleaseDate(rs.getDate("RELEASE_DATE").toLocalDate());
-        film.setDuration(rs.getInt("DURATION"));
-        film.setMpa(mpaDbStorage.readById(rs.getInt("MPA_ID")));
-        return film;
+    private FilmMapper() {
     }
 
-    public Film DTOToFilm(FilmDTO DTO) {
-        if (DTO == null) {
-            throw new IllegalArgumentException("filmDTO cannot be null");
-        }
-        Film film = new Film();
-        film.setId(DTO.getId());
-        film.setName(DTO.getName());
-        film.setDescription(DTO.getDescription());
-        film.setReleaseDate(DTO.getReleaseDate());
-        film.setDuration(DTO.getDuration());
-        film.setLikesFromUsers(DTO.getLikes());
-        film.setGenre(DTO.getGenre());
-        return film;
-    }
-
-    public FilmDTO filmToDTO(Film film) {
+    public static FilmDTO filmToDTO(Film film) {
         if (film == null) {
             throw new IllegalArgumentException("film cannot be null");
         }
@@ -54,15 +23,32 @@ public class FilmMapper implements RowMapper<Film> {
                 .description(film.getDescription())
                 .releaseDate(film.getReleaseDate())
                 .duration(film.getDuration())
-                .likes(film.getLikesFromUsers())
-                .genre(film.getGenre())
+                .likes(film.getLikes())
+                .genres(film.getGenres())
+                .directors(film.getDirectors())
+                .mpa(film.getMpa())
                 .build();
     }
-    public List<FilmDTO> filmsToDTO(List<Film> filmList) {
-        List<FilmDTO> DTOlist = new ArrayList<>();
-        for (Film film : filmList) {
-            DTOlist.add(filmToDTO(film));
+
+    public static Film dtoToFilm(FilmDTO filmDTO) {
+        if (filmDTO == null) {
+            throw new IllegalArgumentException("filmDTO cannot be null");
         }
-        return DTOlist;
+        //TODO remove builder
+        return Film.builder()
+                .id(filmDTO.getId())
+                .name(filmDTO.getName())
+                .description(filmDTO.getDescription())
+                .releaseDate(filmDTO.getReleaseDate())
+                .duration(filmDTO.getDuration())
+                .likes(filmDTO.getLikes())
+                .genres(filmDTO.getGenres())
+                .directors(filmDTO.getDirectors())
+                .mpa(filmDTO.getMpa())
+                .build();
+    }
+
+    public static List<FilmDTO> listFilmsToListDto(Collection<Film> films) {
+        return films.stream().map(FilmMapper::filmToDTO).collect(Collectors.toList());
     }
 }
