@@ -7,13 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.Genre;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Component
@@ -28,12 +24,12 @@ public class GenreDbStorage implements GenreDAO {
         String sqlQuery = "SELECT * FROM genres WHERE id = ?";
 
         if (id == null) {
-            throw new ValidationException("Невозможно выполнить запрос с пустым аргументом.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Genre id is null!");
         }
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapToGenre, id);
         } catch (Throwable e) {
-            throw new ResponseStatusException(HttpStatus.valueOf(404), "Нет такого Genre");
+            throw new ResponseStatusException(HttpStatus.valueOf(404), "Genre not found");
         }
     }
 
@@ -54,10 +50,10 @@ public class GenreDbStorage implements GenreDAO {
     @Override
     public List<Genre> getGenresByFilm(Integer filmId) {
         String sqlQuery
-                = "SELECT genreid, name FROM filmgenres INNER JOIN genres ON genreid = id WHERE filmid = ? ORDER BY genreid ASC ";
+                = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
         List<Genre> genres = jdbcTemplate.query(sqlQuery,
                 (rs, rowNum) -> new Genre(rs.getInt("genreid"), rs.getString("name")), filmId);
-        log.debug("Получен список Genres  для Film с id {}", filmId);
-        return null;
+        log.debug("Get genres list for film (id {})", filmId);
+        return genres;
     }
 }
