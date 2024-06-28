@@ -166,6 +166,7 @@ public class FilmDbStorage implements FilmStorage {
         filmMap.put("DESCRIPTION", film.getDescription());
         filmMap.put("RELEASE_DATE", film.getReleaseDate());
         filmMap.put("DURATION",film.getDuration());
+        filmMap.put("MPA_ID", film.getMpa().getId());
         return filmMap;
     }
 

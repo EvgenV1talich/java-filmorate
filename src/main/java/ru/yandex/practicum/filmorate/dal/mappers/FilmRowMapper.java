@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.dal.mappers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.MPA;
@@ -12,7 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class FilmRowMapper implements RowMapper<Film> {
+
+    MpaDbStorage mpaDbStorage;
     @Override
     public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
         Film film = new Film();
@@ -21,7 +26,7 @@ public class FilmRowMapper implements RowMapper<Film> {
         film.setDescription(rs.getString("DESCRIPTION"));
         film.setReleaseDate(rs.getDate("RELEASE_DATE").toLocalDate());
         film.setDuration(rs.getInt("DURATION"));
-        film.setMpa((MPA) rs.getObject("MPA"));
+        film.setMpa(mpaDbStorage.readById(rs.getInt("MPA_ID")));
         return film;
     }
 
