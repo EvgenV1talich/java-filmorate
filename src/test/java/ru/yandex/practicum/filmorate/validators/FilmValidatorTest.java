@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.validators;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -14,7 +15,9 @@ public class FilmValidatorTest {
     @Test
     public void filmTitleValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));
+        var v = new ArrayList<Genre>();
+        v.add(genre);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
         MPA mpa = new MPA(0, "G", film.getId());
 
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
@@ -23,7 +26,9 @@ public class FilmValidatorTest {
     @Test
     public void filmDescriptionValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));;
+        var v = new ArrayList<Genre>();
+        v.add(genre);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);;
         MPA mpa = new MPA(0, "G", film.getId());
         film.setDescription("looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
@@ -44,7 +49,9 @@ public class FilmValidatorTest {
     @Test
     public void filmReleaseDateValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));
+        var v = new ArrayList<Genre>();
+        v.add(genre);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
         MPA mpa = new MPA(0, "G", film.getId());
         Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
@@ -52,7 +59,9 @@ public class FilmValidatorTest {
     @Test
     public void filmDurationValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, new ArrayList<>((Collection) genre));
+        var v = new ArrayList<Genre>();
+        v.add(genre);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, v);
         MPA mpa = new MPA(0, "G", film.getId());
         Assertions.assertFalse(FilmValidator.filmDurationValidation(film.getDuration()));
     }
