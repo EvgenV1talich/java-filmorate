@@ -1,24 +1,23 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.dal.userdao.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.dal.userdao.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
-    private final InMemoryUserStorage userStorage;
+    private final UserDbStorage userStorage;
 
-    public UserService(@Autowired InMemoryUserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public void addToFriend(Long user1Id, Long user2Id) {
         User user1 = userStorage.getUser(user1Id);
@@ -44,16 +43,17 @@ public class UserService {
         return userStorage;
     }
 
-    public boolean containsUser(Long userId) {
-        return userStorage.containsId(userId);
+    /*public boolean containsUser(Long userId) {
+        return userStorage.contains(userId);
+    }*/
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
     }
 
-    public void updateUser(User user) {
-        userStorage.updateUser(user);
-    }
-
-    public void createUser(User user) {
+    public User createUser(User user) {
         userStorage.createUser(user);
+        return user;
     }
 
     public List<User> getUserFriends(Long id) {
@@ -64,6 +64,12 @@ public class UserService {
             friends.add(userStorage.getUser(friendId));
         }
         return friends;
+    }
+    public User getUserById(Long id) {
+        return userStorage.getUser(id);
+    }
+    public void deleteUser(Long id) {
+        userStorage.deleteUser(id);
     }
 
     public List<User> getSameFriendsList(Long user1Id, Long user2Id) {
@@ -80,4 +86,15 @@ public class UserService {
         }
         return sameFriendsList;
     }
+    public void addFriend(Long userId, Long friendId) {
+        userStorage.userAddFriend(userId, friendId);
+    }
+    public void deleteFriend(Long userId, Long friendId) {
+        userStorage.userDeleteFriend(userId, friendId);
+    }
+
+    public Set<Long> getAllFriendsByUser(Long id) {
+        return userStorage.getAllFriendsByUser(id);
+    }
+
 }

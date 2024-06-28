@@ -1,18 +1,20 @@
 package ru.yandex.practicum.filmorate.dal.genredao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.dal.mappers.GenreRowMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class GenreDbStorage implements GenreDAO {
 
     private final JdbcTemplate jdbcTemplate;
@@ -38,7 +40,12 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getGenresByFilm(Integer filmId) {
-        return null;
+    public ArrayList<Genre> getGenresByFilm(Integer filmId) {
+        String sqlQuery
+                = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
+        List<Genre> genres = jdbcTemplate.query(sqlQuery,
+                (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), filmId);
+        log.debug("Получен список Genres  для Film с id {}", filmId);
+        return new ArrayList<>(genres);
     }
 }

@@ -21,7 +21,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Set<Integer> filmIds = new TreeSet<>();
 
     @Override
-    public Map<String, Object> createFilm(Film film) {
+    public Film createFilm(Film film) {
         if (film.getId() == null) {
             film.setId(generateId());
         }

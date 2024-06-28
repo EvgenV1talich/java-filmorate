@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -65,6 +66,9 @@ public class Film {
                 ", releaseDate=" + releaseDate +
                 ", duration=" + duration +
                 '}';
+    }
+    public void addGenre(Genre newGenre) {
+        genre.add(newGenre);
     }
 
     public Integer getId() {
@@ -132,6 +136,7 @@ public class Film {
             return likesFromUsers.size();
         }
     }
+
 
     public void setDuration(Integer duration) {
         this.duration = duration;

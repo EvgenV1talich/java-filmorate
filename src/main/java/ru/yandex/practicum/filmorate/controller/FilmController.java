@@ -1,8 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
@@ -10,44 +14,35 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.dal.filmdao.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.dal.userdao.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @Slf4j
 public class FilmController {
 
     private final FilmService filmService;
-    //TODO: переписать на userService
-    private final InMemoryUserStorage userStorage;
-
-    @Autowired
-    public FilmController(FilmService filmService, InMemoryUserStorage userStorage) {
-        this.filmService = filmService;
-        this.userStorage = userStorage;
-    }
-
+    private final UserService userService;
 
     @GetMapping("/films")
-    public Collection<Film> getFilms() {
+    public Collection<FilmDTO> getFilms() {
         return filmService.getFilms();
     }
 
     @PostMapping("/films")
-    public Film postFilm(@RequestBody Film film) {
-        if (!FilmValidator.validate(film)) {
-            log.error("Ошибка валидации фильма при запросе POST /films");
-            throw new FilmValidationException("Ошибка валидации фильма, проверьте данные!");
-        }
-        filmService.createFilm(film);
-        return film;
+    public ResponseEntity<FilmDTO> postFilm(@RequestBody @Valid FilmDTO film) {
+        System.out.println("--------------Пытаемся создать фильм-----------");
+        return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.CREATED);
     }
 
     @PutMapping("/films")
-    public Optional<Film> putFilm(@RequestBody Film film) {
+    public ResponseEntity<FilmDTO> putFilm(@RequestBody Film film) {
         if (!FilmValidator.validate(film)) {
             log.error("Ошибка валидации фильма при запросе PUT /users");
             throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные.");
@@ -55,8 +50,7 @@ public class FilmController {
         if (!filmService.containsFilm(film.getId())) {
             throw new FilmNotFoundException("Такой фильм не найден!");
         } else {
-            filmService.updateFilm(film);
-            return Optional.ofNullable(filmService.getFilm(film.getId()));
+            return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.CREATED);
         }
     }
 
@@ -69,14 +63,14 @@ public class FilmController {
     public void removeLikeFromFilm(@PathVariable Integer id, @PathVariable Long userId) {
         if (!filmService.containsFilm(id)) {
             throw new FilmNotFoundException("Фильм с таким ID не найден!");
-        } else if (!userStorage.containsId(userId)) {
+        } /*else if (!userService.containsUser(userId)) {
             throw new UserNotFoundException("Пользователь с таким ID не найден!");
-        } else {
+        }*/ else {
             filmService.removeLikeToFilm(id, userId);
         }
     }
 
-    @GetMapping("/films/popular")
+    /*@GetMapping("/films/popular")
     public List<Film> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
         if (count.isEmpty()) {
             return filmService.getMostPopularFilms(10);
@@ -85,6 +79,6 @@ public class FilmController {
         } else {
             return filmService.getMostPopularFilms(count.get());
         }
-    }
+    }*/
 
 }

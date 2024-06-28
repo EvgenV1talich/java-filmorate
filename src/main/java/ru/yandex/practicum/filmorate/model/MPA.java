@@ -16,6 +16,10 @@ public class MPA {
         this.rate = rate;
     }
 
+    public MPA() {
+
+    }
+
     @Override
     public String toString() {
         return "MPA{" +

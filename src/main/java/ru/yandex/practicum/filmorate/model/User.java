@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Set;
@@ -17,8 +19,10 @@ public class User {
     private Long id;
     @Email
     private String email;
+    @NotBlank
     private String login;
     private String name;
+    @Past
     private LocalDate birthday;
     private Set<Long> friends = new TreeSet<>();
     private ArrayList<FriendRequest> requests;

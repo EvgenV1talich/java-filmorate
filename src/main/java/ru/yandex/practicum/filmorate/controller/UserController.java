@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserUnknownIdException;
@@ -14,12 +17,12 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-@RestController
+/*@RestController
 @Slf4j
 
 public class UserController {
-    private Long generatedId = 1L;
     private final UserService userService;
 
     @Autowired
@@ -42,8 +45,7 @@ public class UserController {
         if (user.getName() == null) {
             user.setName(user.getLogin());
         }
-        userService.createUser(user);
-        return userService.getUserStorage().getUser(user.getId());
+        return userService.createUser(user);
     }
 
 
@@ -53,9 +55,9 @@ public class UserController {
             log.error("Ошибка валидации пользователя при запросе PUT /users");
             throw new UserValidationException("Ошибка валидации пользователя. Проверьте данные.");
         }
-        if (!userService.containsUser(user.getId())) {
+        *//*if (!userService.containsUser(user.getId())) {
             throw new UserNotFoundException("Такой пользователь не найден!");
-        } else {
+        } *//*else {
             userService.updateUser(user);
             return Optional.of(userService.getUserStorage().getUser(user.getId()));
         }
@@ -63,43 +65,112 @@ public class UserController {
 
     @PutMapping("/users/{id}/friends/{friendId}")
     public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        if (!userService.containsUser(id) || !userService.containsUser(friendId)) {
+        *//*if (!userService.containsUser(id) || !userService.containsUser(friendId)) {
             throw new UserNotFoundException("Пользователя/лей с таким ID е найдено");
-        }
+        }*//*
         userService.addToFriend(id, friendId);
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
     public void removeFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        if (!userService.containsUser(id) || !userService.containsUser(friendId)) {
+        *//*if (!userService.containsUser(id) || !userService.containsUser(friendId)) {
             log.error("---Failed to delete friends!---");
             throw new UserUnknownIdException("Пользователя/лей с таким ID не найдено");
-        }
+        }*//*
         log.info("PUT request to remove a friend " + LocalDateTime.now() + "User1 ID = " + id + " , User2 ID = " + friendId);
         userService.removeFromFriends(id, friendId);
     }
 
     @GetMapping("users/{id}/friends")
     public List<User> getUserFriendsList(@PathVariable Long id) {
-        if (!userService.containsUser(id)) {
+        *//*if (!userService.containsUser(id)) {
             log.error("---Failed to add friends!---");
             throw new UserUnknownIdException("Пользователя/лей с таким ID не найдено");
-        }
+        }*//*
         return userService.getUserFriends(id);
     }
 
     @GetMapping("users/{id}/friends/common/{otherId}")
     public List<User> getUsersSameFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        if (!userService.containsUser(id) || !userService.containsUser(otherId)) {
+        *//*if (!userService.containsUser(id) || !userService.containsUser(otherId)) {
             log.error("---Failed to get common friends!---");
             throw new UserUnknownIdException("Пользователя/лей с таким ID не найдено");
-        }
+        }*//*
         log.info("Trying to return common friends list from User" + id + " and User" + otherId);
         return userService.getSameFriendsList(id, otherId);
     }
 
-    private Long generateId() {
-        return generatedId++;
+}*/
+@RestController
+@RequiredArgsConstructor
+@Slf4j
+@RequestMapping("/users")
+public class UserController {
+    private final UserService userService;
+
+    @PostMapping
+    public User createUser(@RequestBody @Valid User newUser) {
+        log.info("Получен POST запрос по эндпоинту '/users' на создание user");
+
+        return (userService.createUser(newUser));
     }
 
+    @PutMapping
+    public User updateUser(@RequestBody @Valid User newUser) {
+        log.info("Получен PUT запрос по эндпоинту '/users' на обновление user");
+        return userService.updateUser(newUser);
+    }
+
+    @GetMapping
+    public List<User> readAllUsers() {
+        log.info("Получен GET запрос по эндпоинту '/users' на получение всех users");
+        return userService.getUsersList();
+    }
+
+    @PutMapping("{id}/friends/{friendId}")
+    public ResponseEntity<?> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.addFriend(id, friendId);
+        log.info(
+                "Получен PUT запрос по эндпоинту '/users/{}/friends/{}' на добавление friend c ID {} для user c ID {}. ",
+                id, friendId, id, friendId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}/friends/{friendId}")
+    public ResponseEntity<?> deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.deleteFriend(id, friendId);
+        log.info(
+                "Получен DELETE запрос по эндпоинту '/users/{}/friends/{}' " +
+                        "на удаление friend c ID {} для user c ID {}.",
+                id, friendId, id, friendId);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
+
+    @GetMapping("{id}/friends")
+    public Set<Long> readAllFriendsByUserId(@PathVariable Long id) {
+        log.info("Получен GET запрос по эндпоинту '/users/{id}/friends' на получение всех друзей для user c ID {}.",
+                id);
+        return userService.getAllFriendsByUser(id);
+    }
+
+    @GetMapping("{id}/friends/common/{otherId}")
+    public List<User> readSameFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        log.info(
+                "Получен GET запрос по эндпоинту '/users/{}/friends/common/{}' на получение всех общих друзей у Users c ID {} и {}.",
+                id, otherId, id, otherId);
+        return userService.getSameFriendsList(id, otherId);
+    }
+
+    @GetMapping("{userId}")
+    public User getUserById(@PathVariable Long userId) {
+        log.info("Получен GET запрос по эндпоинту '/users/{userId}' на получение Users c ID {}", userId);
+        return userService.getUserById(userId);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        log.info("Получен DELETE запрос по эндпоинту '/users/{}' на удаление User c ID {}. ", userId, userId);
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

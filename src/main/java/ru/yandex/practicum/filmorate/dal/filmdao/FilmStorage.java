@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.dal.filmdao;
 
+import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public interface FilmStorage {
-    Map<String, Object> createFilm(Film film);
+    Film createFilm(Film film);
 
     void updateFilm(Film film);
 
