@@ -154,8 +154,8 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public boolean contains(Integer id) {
-        String query = "EXISTS(SELECT ID FROM FILMS WHERE ID = :?);";
-        return (jdbcTemplate.update(query, id)) > 0;
+        String query = "SELECT count(*) FROM FILMS WHERE ID = ?";
+        return (jdbcTemplate.queryForObject(query, new Object[]{id}, Integer.class).intValue()) > 0;
     }
 
     /*public Integer getCount() {
