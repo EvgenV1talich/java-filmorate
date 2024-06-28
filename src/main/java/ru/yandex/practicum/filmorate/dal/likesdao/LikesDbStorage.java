@@ -21,30 +21,30 @@ public class LikesDbStorage implements LikesDAO {
 
     @Override
     public void deleteLike(Integer filmId, Long userId) {
-        String query = "DELETE FROM likes WHERE filmid = ? AND userid = ?";
-        jdbcTemplate.update(query, filmId, userId); // в том же порядке что и в скрипте
-        log.debug("Like у Film с id {} от User с ID {} удалён", filmId, userId);
+        String query = "DELETE FROM films_users WHERE film_id = ? AND user_id = ?";
+        jdbcTemplate.update(query, filmId, userId);
+        log.debug("Like in film id={} from user id={} removed", filmId, userId);
     }
 
     @Override
     public void addLike(Long filmId, Long userId) {
-        String query = "DELETE FROM likes WHERE filmId = ? AND userId = ? ";
+        String query = "DELETE FROM films_users WHERE film_id = ? AND user_id = ?";
         jdbcTemplate.update(query, filmId, userId);
-        query = "INSERT INTO likes (filmid, userid) VALUES(?, ?) ";
+        query = "INSERT INTO films_users (film_id, user_id) VALUES(?, ?) ";
         jdbcTemplate.update(query, filmId, userId);
-        log.debug("Film с ID {} добавлен Like от User с ID {}", filmId, userId);
+        log.debug("Add like to film id={} from user id={}", filmId, userId);
     }
 
     @Override
     public Set<Long> getLikerByFilmId(Integer filmID) {
-        String query = "SELECT userid FROM likes WHERE filmid = ?";
+        String query = "SELECT user_id FROM films_users WHERE film_id = ?";
         List<Long> likes = jdbcTemplate.query(query, (rs, rowNum) -> rs.getLong("userid"), filmID);
-        log.debug("Получен список userid Like у Film с id {}.", filmID);
+        log.debug("Get users who liked film id={}.", filmID);
         return new HashSet<>(likes);
     }
 
     private static Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return rs.getLong("FILMID");
+        return rs.getLong("film_id");
     }
 
 }
