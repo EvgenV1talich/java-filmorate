@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dal.mappers.UserRowMapper;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserUnknownIdException;
@@ -108,18 +109,21 @@ public class UserController {
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final UserRowMapper mapper;
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO newUser) {
         log.info("Получен POST запрос по эндпоинту '/users' на создание user");
-
+        if (!UserValidator.validate(mapper.DTOToUser(newUser))){
+            throw new UserValidationException("Невалидный User!");
+        }
         return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO newUser) {
         log.info("Получен PUT запрос по эндпоинту '/users' на обновление user");
-        return null;//userService.updateUser(newUser);
+        return new ResponseEntity<>(userService.updateUser(newUser), HttpStatus.OK);
     }
 
     @GetMapping
