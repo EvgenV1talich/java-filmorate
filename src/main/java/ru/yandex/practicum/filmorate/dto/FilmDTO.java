@@ -18,7 +18,6 @@ import java.util.Set;
 public class FilmDTO {
 
     private Integer id;
-    @NotBlank
     private String name;
     @Size(min = 0, max = 199)
     private String description;
