@@ -23,27 +23,27 @@ public class MpaDbStorage implements MpaStorage {
     public MPA readById(Integer id) {
         String sqlQuery = "SELECT * FROM mpa WHERE id = ?";
         if (id == null) {
-            throw new ValidationException("Невозможно выполнить запрос с пустым аргументом.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "MPA id = null!");
         }
         try {
-            log.debug("Получен Mpa по id {}.", id);
+            log.debug("get MPA id={}.", id);
             return jdbcTemplate.queryForObject(sqlQuery, this::mapToMpa, id);
         } catch (Throwable e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Нет такого Mpa");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MPA not found!");
         }
     }
 
     @Override
     public List<MPA> readAll() {
         String sqlQuery = "SELECT * FROM mpa ORDER BY id";
-        log.debug("Все Mpa получены");
+        log.debug("Get MPA list");
         return jdbcTemplate.query(sqlQuery, this::mapToMpa);
     }
 
     public MPA mapToMpa(ResultSet rs, int rowNum) throws SQLException {
         return MPA.builder()
                 .id(rs.getInt("id"))
-                .name(rs.getString("name"))
+                .name(rs.getString("rate"))
                 .build();
     }
 }
