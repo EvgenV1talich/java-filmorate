@@ -5,7 +5,7 @@ import java.util.Set;
 
 public interface LikesDAO {
 
-    void deleteLike(Long filmId, Long userId);
+    void deleteLike(Integer filmId, Long userId);
 
     void addLike(Long filmId, Long userId);
 
