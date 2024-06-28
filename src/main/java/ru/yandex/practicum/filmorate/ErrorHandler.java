@@ -25,7 +25,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleFilmValidationException(final FilmValidationException ex) {
-        return Map.of("error", "Ошибка валидации пользователя.");
+        return Map.of("error", "Ошибка валидации фильма.");
     }
 
     @ExceptionHandler

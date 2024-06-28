@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.mappers.UserRowMapper;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
@@ -29,6 +30,7 @@ public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper mapper;
+
     @Override
     public User createUser(User user) {
         /*String query = "INSERT INTO USERS\n" +
@@ -50,12 +52,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        /*String query = "UPDATE USERS\n" +
-                "SET EMAIL=?, LOGIN=?, NAME=?, BIRTHDAY=?\n" +
-                "WHERE ID=?;";
-        jdbcTemplate.query(query, mapper);*/
+
         if (user == null || user.getId() == null) {
-            throw new UserValidationException("Невалидный User");
+            throw new UserNotFoundException("User не найден");
         }
         String sqlQuery = "UPDATE users SET email = ?, login = ?, name =?, birthday = ? WHERE id = ?";
         if (jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(),
@@ -63,7 +62,7 @@ public class UserDbStorage implements UserStorage {
             log.debug(" User {} успешно обновлён", user.getId());
             return user;
         } else {
-            throw new EntityNotFoundException("User с таким id не найден " + user.getId());
+            throw new UserNotFoundException("User с таким id не найден " + user.getId());
         }
 
     }
@@ -101,7 +100,7 @@ public class UserDbStorage implements UserStorage {
             throw new EntityNotFoundException("Юзер с таким id не найден " + id);
         }
         return user;
-        }
+    }
 
     /*public boolean contains(Long userId) {
         String query = "EXISTS(SELECT id FROM \"users\" WHERE id = :userId);";
@@ -116,8 +115,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void userAddFriend(Long userId, Long friendId) {
-        User user = getUser(userId);
-        User friend = getUser(friendId);
+        if (!UserValidator.validate(getUser(userId)) || !UserValidator.validate(getUser(friendId))) {
+            throw new UserValidationException("Невалидный юзер!");
+        }
         String query = "INSERT INTO users_friends (request_user_id, response_user_id) VALUES (?,?)";
         try {
             jdbcTemplate.update(query, userId, friendId);
@@ -143,6 +143,7 @@ public class UserDbStorage implements UserStorage {
         }
 
     }
+
     public Set<Long> getAllFriendsByUser(Long id) {
         /*getUser(id);
         String query = "SELECT * FROM users WHERE id IN (SELECT friendid FROM friends WHERE userid = ?)";

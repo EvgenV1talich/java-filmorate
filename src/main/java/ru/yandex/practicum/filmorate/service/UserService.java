@@ -45,11 +45,9 @@ public class UserService {
     public UserStorage getUserStorage() {
         return userStorage;
     }
+
     public UserDTO updateUser(UserDTO userDto) {
-
-        User user  = userStorage.updateUser(mapper.DTOToUser(userDto));
-        return mapper.userToDTO(userStorage.updateUser(user));
-
+        return mapper.userToDTO(userStorage.updateUser(mapper.DTOToUser(userDto)));
     }
 
     public UserDTO createUser(UserDTO user) {
@@ -65,9 +63,11 @@ public class UserService {
         }
         return mapper.UserListToUserDTOList(friends);
     }
+
     public UserDTO getUserById(Long id) {
         return mapper.userToDTO(userStorage.getUser(id));
     }
+
     public void deleteUser(Long id) {
         userStorage.deleteUser(id);
     }
@@ -86,9 +86,11 @@ public class UserService {
         }
         return mapper.UserListToUserDTOList(sameFriendsList);
     }
+
     public void addFriend(Long userId, Long friendId) {
         userStorage.userAddFriend(userId, friendId);
     }
+
     public void deleteFriend(Long userId, Long friendId) {
         userStorage.userDeleteFriend(userId, friendId);
     }
