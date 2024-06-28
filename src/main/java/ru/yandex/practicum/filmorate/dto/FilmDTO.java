@@ -17,11 +17,10 @@ public class FilmDTO {
     private Integer id;
     @NotNull
     private String name;
-    @Size(min = 0, max = 199)
+    @Size(min = 0, max = 200)
     private String description;
     @Past
     private LocalDate releaseDate;
-    @PositiveOrZero
     private Integer duration;
     private Set<Long> likes;
     private ArrayList<Genre> genre;

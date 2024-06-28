@@ -76,20 +76,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUser(Long id) {
-        /*String query = "SELECT ID, EMAIL, LOGIN, NAME, BIRTHDAY\n" +
-                "FROM USERS\n" +
-                "WHERE ID = :userId";
-        return(jdbcTemplate.queryForObject(query, mapper));*/
-
-
-        /*String sqlQuery = "SELECT * FROM users WHERE id = ?;";
-            User user = jdbcTemplate.queryForObject(sqlQuery, mapper);
-            log.debug("User с ID {} получен.", id);
-            return user;*/
         String sqlQuery = String.format("SELECT * FROM users WHERE id = %d", id);
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(sqlQuery);
         User user = new User();
-        if (userRows.next()) {
+        if (userRows.first()) {
             user.setId(userRows.getLong("id"));
             user.setEmail(userRows.getString("email"));
             user.setLogin(userRows.getString("login"));
