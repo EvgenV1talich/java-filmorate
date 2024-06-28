@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserUnknownIdException;
 import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
@@ -109,22 +110,22 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody @Valid User newUser) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO newUser) {
         log.info("Получен POST запрос по эндпоинту '/users' на создание user");
 
-        return (userService.createUser(newUser));
+        return new ResponseEntity<>(userService.createUser(newUser), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public User updateUser(@RequestBody @Valid User newUser) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO newUser) {
         log.info("Получен PUT запрос по эндпоинту '/users' на обновление user");
-        return userService.updateUser(newUser);
+        return null;//userService.updateUser(newUser);
     }
 
     @GetMapping
-    public List<User> readAllUsers() {
+    public ResponseEntity<List<UserDTO>> readAllUsers() {
         log.info("Получен GET запрос по эндпоинту '/users' на получение всех users");
-        return userService.getUsersList();
+        return new ResponseEntity<>(userService.getUsersList(), HttpStatus.OK);
     }
 
     @PutMapping("{id}/friends/{friendId}")
@@ -154,17 +155,17 @@ public class UserController {
     }
 
     @GetMapping("{id}/friends/common/{otherId}")
-    public List<User> readSameFriends(@PathVariable Long id, @PathVariable Long otherId) {
+    public ResponseEntity<List<UserDTO>> readSameFriends(@PathVariable Long id, @PathVariable Long otherId) {
         log.info(
                 "Получен GET запрос по эндпоинту '/users/{}/friends/common/{}' на получение всех общих друзей у Users c ID {} и {}.",
                 id, otherId, id, otherId);
-        return userService.getSameFriendsList(id, otherId);
+        return new ResponseEntity<>(userService.getSameFriendsList(id, otherId), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
-    public User getUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
         log.info("Получен GET запрос по эндпоинту '/users/{userId}' на получение Users c ID {}", userId);
-        return userService.getUserById(userId);
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")

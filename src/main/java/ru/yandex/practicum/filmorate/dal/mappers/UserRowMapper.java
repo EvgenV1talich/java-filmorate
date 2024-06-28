@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserRowMapper implements RowMapper<User> {
@@ -45,5 +47,12 @@ public class UserRowMapper implements RowMapper<User> {
                 .login(user.getLogin())
                 .name(user.getName())
                 .birthday(user.getBirthday()).build();
+    }
+    public List<UserDTO> UserListToUserDTOList(List<User>usersList) {
+        List<UserDTO> DTOList = new ArrayList<>();
+        for (User user : usersList) {
+            DTOList.add(userToDTO(user));
+        }
+        return DTOList;
     }
 }
