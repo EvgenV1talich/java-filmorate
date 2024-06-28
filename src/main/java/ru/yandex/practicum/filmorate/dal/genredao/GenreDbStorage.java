@@ -4,48 +4,60 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.dal.mappers.GenreMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Repository
-@RequiredArgsConstructor
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class GenreDbStorage implements GenreDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final GenreMapper genreMapper;
+
 
     @Override
     public Genre getById(Integer id) {
-        String query = "SELECT * FROM genres WHERE id = :id;";
+        String sqlQuery = "SELECT * FROM genres WHERE id = ?";
+
         if (id == null) {
-            throw new RuntimeException("Ошибка - передан запрос с неверным ID жанра");
+            throw new ValidationException("Невозможно выполнить запрос с пустым аргументом.");
         }
         try {
-            return jdbcTemplate.queryForObject(query, genreMapper);
-        } catch (Throwable ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Жанр не существует!");
+            return jdbcTemplate.queryForObject(sqlQuery, this::mapToGenre, id);
+        } catch (Throwable e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(404), "Нет такого Genre");
         }
     }
 
     @Override
     public List<Genre> getAll() {
-        String query = "SELECT * FROM genres;";
-        return jdbcTemplate.query(query, genreMapper);
+        String sqlQuery = "SELECT * FROM genres ORDER BY id";
+        log.debug("Все Genres получены.");
+        return jdbcTemplate.query(sqlQuery, this::mapToGenre);
+    }
+
+    public Genre mapToGenre(ResultSet rs, int rowNum) throws SQLException {
+        return Genre.builder()
+                .id(rs.getInt("id"))
+                .name(rs.getString("name"))
+                .build();
     }
 
     @Override
-    public ArrayList<Genre> getGenresByFilm(Integer filmId) {
+    public List<Genre> getGenresByFilm(Integer filmId) {
         String sqlQuery
-                = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
+                = "SELECT genreid, name FROM filmgenres INNER JOIN genres ON genreid = id WHERE filmid = ? ORDER BY genreid ASC ";
         List<Genre> genres = jdbcTemplate.query(sqlQuery,
-                (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), filmId);
+                (rs, rowNum) -> new Genre(rs.getInt("genreid"), rs.getString("name")), filmId);
         log.debug("Получен список Genres  для Film с id {}", filmId);
-        return new ArrayList<>(genres);
+        return null;
     }
 }
