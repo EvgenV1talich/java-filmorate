@@ -2,6 +2,9 @@ package ru.yandex.practicum.filmorate.dal.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
@@ -18,5 +21,29 @@ public class UserRowMapper implements RowMapper<User> {
         user.setName(rs.getString("NAME"));
         user.setBirthday(rs.getDate("BIRTHDAY").toLocalDate());
         return user;
+    }
+    public User DTOToUser(UserDTO DTO) {
+        if (DTO == null) {
+            throw new IllegalArgumentException("filmDTO cannot be null");
+        }
+        User user = new User();
+        user.setId(DTO.getId());
+        user.setName(DTO.getName());
+        user.setEmail(DTO.getEmail());
+        user.setLogin(DTO.getLogin());
+        user.setBirthday(DTO.getBirthday());
+        return user;
+    }
+    public UserDTO userToDTO(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        return UserDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .login(user.getLogin())
+                .name(user.getName())
+                .birthday(user.getBirthday()).build();
     }
 }

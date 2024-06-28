@@ -16,6 +16,7 @@ import java.util.TreeSet;
 @Data
 @NoArgsConstructor
 public class User {
+
     private Long id;
     @Email
     private String email;
