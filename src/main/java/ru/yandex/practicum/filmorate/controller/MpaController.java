@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.model.MPA;
-import ru.yandex.practicum.filmorate.service.mpa.MpaService;
-
+import ru.yandex.practicum.filmorate.dto.MpaDTO;
+import ru.yandex.practicum.filmorate.service.MpaService;
 
 import java.util.List;
 
@@ -21,18 +20,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MpaController {
 
-    private final MpaService mpaService;
+    final MpaService mpaService;
 
     @GetMapping
-    public List<MPA> readAll() {
-        log.info("Получен GET запрос по эндпоинту '/mpa' на получение всех mpa");
-        return mpaService.readAll();
+    public ResponseEntity<List<MpaDTO>> readAll() {
+        log.info("GET '/mpa' all mpa");
+        return new ResponseEntity<>(mpaService.readAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public MPA readById(@PathVariable Integer id) {
-        log.info("Получен GET запрос по эндпоинту '/mpa/{}' на получение mpa по id", id);
-        return mpaService.readById(id);
+    public ResponseEntity<MpaDTO> readById(@PathVariable Integer id) {
+        log.info("GET'/mpa/{}' mpa by id", id);
+        return new ResponseEntity<>(mpaService.readById(id), HttpStatus.OK);
     }
 
 }
