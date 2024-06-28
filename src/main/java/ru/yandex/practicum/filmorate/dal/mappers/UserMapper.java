@@ -1,42 +1,20 @@
-package ru.yandex.practicum.filmorate.dal.mappers;
+package ru.yandex.practicum.filmorate.mapper;
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
-public class UserMapper implements RowMapper<User> {
-    @Override
-    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        User user = new User();
-        user.setId(rs.getLong("ID"));
-        user.setEmail(rs.getString("EMAIL"));
-        user.setLogin(rs.getString("LOGIN"));
-        user.setName(rs.getString("NAME"));
-        user.setBirthday(rs.getDate("BIRTHDAY").toLocalDate());
-        return user;
+public class UserMapper {
+
+    private UserMapper() {
     }
-    public User DTOToUser(UserDTO DTO) {
-        if (DTO == null) {
-            throw new IllegalArgumentException("filmDTO cannot be null");
-        }
-        User user = new User();
-        user.setId(DTO.getId());
-        user.setName(DTO.getName());
-        user.setEmail(DTO.getEmail());
-        user.setLogin(DTO.getLogin());
-        user.setBirthday(DTO.getBirthday());
-        return user;
-    }
-    public UserDTO userToDTO(User user) {
+
+    public static UserDTO userToDTO(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
+            throw new IllegalArgumentException("user cannot be null");
         }
 
         return UserDTO.builder()
@@ -44,13 +22,26 @@ public class UserMapper implements RowMapper<User> {
                 .email(user.getEmail())
                 .login(user.getLogin())
                 .name(user.getName())
-                .birthday(user.getBirthday()).build();
+                .birthday(user.getBirthday())
+                .build();
     }
-    public List<UserDTO> UserListToUserDTOList(List<User>usersList) {
-        List<UserDTO> DTOList = new ArrayList<>();
-        for (User user : usersList) {
-            DTOList.add(userToDTO(user));
+
+    public static User dtoToUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("userDTO cannot be null");
         }
-        return DTOList;
+
+        return User.builder()
+                .id(userDTO.getId())
+                .email(userDTO.getEmail())
+                .login(userDTO.getLogin())
+                .name(userDTO.getName())
+                .birthday(userDTO.getBirthday())
+                .build();
     }
+
+    public static List<UserDTO> listUsersToListDto(Collection<User> users) {
+        return users.stream().map(UserMapper::userToDTO).collect(Collectors.toList());
+    }
+
 }
