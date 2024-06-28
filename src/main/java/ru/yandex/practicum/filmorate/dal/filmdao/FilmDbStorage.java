@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -52,18 +53,46 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void updateFilm(Film film) {
-        String query = "UPDATE FILMS " +
-                "SET NAME=?, DESCRIPTION=?, RELEASE_DATE=?, DURATION=? WHERE ID=?;";
-        int rowsUpdated = jdbcTemplate.update(query,
-                film.getName(),
-                film.getDescription(),
-                film.getReleaseDate(),
-                film.getDuration(),
-                film.getId()
-                );
-        if (rowsUpdated == 0) {
-            throw new RuntimeException("Не удалось обновить данные");
+//        String query = "UPDATE FILMS " +
+//                "SET NAME=?, DESCRIPTION=?, RELEASE_DATE=?, DURATION=? WHERE ID=?;";
+//        int rowsUpdated = jdbcTemplate.update(query,
+//                film.getName(),
+//                film.getDescription(),
+//                film.getReleaseDate(),
+//                film.getDuration(),
+//                film.getId()
+//                );
+//        if (rowsUpdated == 0) {
+//            throw new RuntimeException("Не удалось обновить данные");
+//        }
+        if (film == null) {
+            throw new FilmNotFoundException("Film не найден");
         }
+        String sqlQuery
+                = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa_id = ? WHERE id = ?";
+        if (jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate(),
+                film.getDuration(), film.getMpa().getId(), film.getId()) != 0) {
+            log.info("Film c id {} обновлён", film.getId());
+        } else {
+            throw new EntityNotFoundException("Film с таким id не существует");
+        }
+
+        if (film.getGenre() == null || film.getGenre().isEmpty()) {
+            String sqlDelete = "DELETE FROM filmgenres WHERE filmid = ?";
+            jdbcTemplate.update(sqlDelete, film.getId());
+
+        } else {
+            String sqlDelete2 = "DELETE FROM filmgenres WHERE filmid = ?";
+            jdbcTemplate.update(sqlDelete2, film.getId());
+            String sqlUpdate = "INSERT INTO filmgenres (filmid, genreid) VALUES (?,?)";
+            for (Genre genre : film.getGenre()) {
+                jdbcTemplate.update(sqlUpdate, film.getId(), genre.getId());
+            }
+        }
+        film.setGenre(genreStorage.getGenresByFilm(film.getId()));
+        String sqlQueryDeleteDirector = "DELETE FROM filmdirectors WHERE filmid = ?";
+        jdbcTemplate.update(sqlQueryDeleteDirector, film.getId());
+        //return film;
     }
 
     @Override
