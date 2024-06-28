@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.mappers.UserRowMapper;
 import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
@@ -129,6 +130,9 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void userDeleteFriend(Long userId, Long friendId) {
+        if (UserValidator.validate(getUser(userId)) || UserValidator.validate(getUser(friendId))) {
+            throw new UserValidationException("Невалидный User!");
+        }
         getUser(userId); // для валидации
         getUser(friendId); // для валидации
         String query = "DELETE FROM users_friends WHERE request_user_id = ? AND response_user_id = ?";

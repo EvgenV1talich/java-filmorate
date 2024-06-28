@@ -2,18 +2,14 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.dal.filmdao.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.dal.userdao.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
@@ -70,15 +66,16 @@ public class FilmController {
         }
     }
 
-    /*@GetMapping("/films/popular")
-    public List<Film> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
-        if (count.isEmpty()) {
+    @GetMapping("/films/popular")
+    public List<FilmDTO> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
+        /*if (count.isEmpty()) {
             return filmService.getMostPopularFilms(10);
         } else if (count.get() > filmService.getFilmsCount()) {
             return filmService.getMostPopularFilms(filmService.getFilmsCount());
         } else {
             return filmService.getMostPopularFilms(count.get());
-        }
-    }*/
+        }*/
+        return null;
+    }
 
 }

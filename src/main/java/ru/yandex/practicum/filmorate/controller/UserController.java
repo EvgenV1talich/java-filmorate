@@ -123,9 +123,9 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO newUser) {
         log.info("Получен PUT запрос по эндпоинту '/users' на обновление user");
-        if (!UserValidator.validate(mapper.DTOToUser(newUser))) {
+        /*if (!UserValidator.validate(mapper.DTOToUser(newUser))) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+        }*/
         return new ResponseEntity<>(userService.updateUser(newUser), HttpStatus.OK);
     }
 

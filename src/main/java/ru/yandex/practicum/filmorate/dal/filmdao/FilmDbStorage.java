@@ -11,12 +11,8 @@ import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 
 import javax.persistence.EntityNotFoundException;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,8 +158,13 @@ public class FilmDbStorage implements FilmStorage {
         //return jdbcTemplate.execute("SELECT COUNT(*) FROM films");
     }*/
 
-    public Collection<Film> getMostPopularFilms(Integer topCount) {
+    public List<Map<String, Object>> getMostPopularFilms(Integer topCount) {
         //TODO: написать нормальный запрос
-        return null;
+        String query = "SELECT id, film_id FROM films INNER JOIN films_users ON films.id = films_users.film_id";
+        return jdbcTemplate.queryForList(query);
+    }
+    public Integer getFilmsCount() {
+        String query = "SELECT COUNT(*) FROM films";
+        return jdbcTemplate.update(query);
     }
 }
