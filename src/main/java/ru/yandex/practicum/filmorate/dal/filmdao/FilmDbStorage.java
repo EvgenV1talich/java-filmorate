@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.dal.filmdao;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,26 +21,17 @@ import java.util.Map;
 
 @Slf4j
 @Component("filmDBStorage")
+@RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final MpaDBStorage mpaDBStorage;
     private final GenreStorage genreStorage;
     private final LikeDBStorage likeDBStorage;
-    private final DirectorStorage directorStorage;
 
-    @Autowired
-    public FilmDBStorage(JdbcTemplate jdbcTemplate, MpaDBStorage mpaDBStorage, GenreStorage genreStorage,
-                         LikeDBStorage likeDBStorage, DirectorStorage directorStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.mpaDBStorage = mpaDBStorage;
-        this.genreStorage = genreStorage;
-        this.likeDBStorage = likeDBStorage;
-        this.directorStorage = directorStorage;
-    }
 
     @Override
-    public Film saveFilm(Film film) {
+    public Film createFilm(Film film) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("films")
                 .usingGeneratedKeyColumns("id");
         Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
@@ -60,7 +52,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public void updateFilm(Film film) {
         if (film == null) {
             throw new ValidationException("Film не найден");
         }
@@ -93,7 +85,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> readAllFilms() {
+    public List<Film> getFilms() {
         String query = "SELECT * FROM films";
         List<Film> films = jdbcTemplate.query(query, this::mapToFilm);
         log.debug("Получены все Film.");
@@ -101,10 +93,11 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmById(Long id) {
+    public Film getFilm(Integer id) {
         String query = "SELECT * FROM films WHERE id = ?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, id);
         if (sqlRowSet.first()) {
+            //TODO remove builder
             Film film = Film.builder()
                     .id(sqlRowSet.getLong("id"))
                     .name(sqlRowSet.getString("name"))
@@ -113,57 +106,12 @@ public class FilmDbStorage implements FilmStorage {
                     .duration(sqlRowSet.getInt("duration"))
                     .genres(genreStorage.getGenresByFilmID(sqlRowSet.getLong("id")))
                     .likes(likeDBStorage.getLikerByFilmId(sqlRowSet.getLong("id")))
-                    .directors(directorStorage.getDirectorsByFilmId(sqlRowSet.getLong("id")))
                     .mpa(mpaDBStorage.readById(sqlRowSet.getInt("mpaid")))
                     .build();
             log.debug("Получен Film с ID {}.", id);
             return film;
         } else {
             throw new EntityNotFoundException("Film не найден");
-        }
-    }
-
-    @Override
-    public List<Film> getSortedFilms(Long id, String sortBy) {
-        String sqlQueryLikes = "SELECT f.* "
-                + "FROM films as f "
-                + "LEFT JOIN filmdirectors AS fd ON f.id = fd.filmid "
-                + "LEFT JOIN likes AS l ON f.id = l.filmid "
-                + "WHERE fd.directorid = ?"
-                + "GROUP BY f.id "
-                + "ORDER BY COUNT(l.userid) DESC";
-        String sqlQueryYears = "SELECT * "
-                + "FROM films AS f "
-                + "LEFT JOIN filmdirectors AS fd ON f.id = fd.filmid "
-                + "WHERE fd.directorid = ?"
-                + "ORDER BY releaseDate";
-        List<Film> films;
-        if (sortBy.equals("likes")) {
-            films = jdbcTemplate.query(sqlQueryLikes, this::mapToFilm, id);
-        } else if (sortBy.equals("year")) {
-            films = jdbcTemplate.query(sqlQueryYears, this::mapToFilm, id);
-        } else {
-            throw new EntityNotFoundException("Некорректный запрос");
-        }
-        log.debug("Получен отсортированный список фильмов по кол-ву likes или releaseDate по ID director {}", id);
-        return films;
-    }
-
-    private void updateDirector(Film film) {
-        if (film.getDirectors() != null) {
-            jdbcTemplate.batchUpdate("INSERT INTO filmdirectors (filmid, directorid) VALUES (?, ?)",
-                    new BatchPreparedStatementSetter() {
-                        @Override
-                        public void setValues(PreparedStatement ps, int i) throws SQLException {
-                            ps.setLong(1, film.getId());
-                            ps.setLong(2, new ArrayList<>(film.getDirectors()).get(i).getId());
-                        }
-
-                        @Override
-                        public int getBatchSize() {
-                            return film.getDirectors().size();
-                        }
-                    });
         }
     }
 
@@ -181,41 +129,6 @@ public class FilmDbStorage implements FilmStorage {
                 .build();
     }
 
-
-    public List<Film> searchFilmForDirector(String queryStr) {
-        String query = "SELECT * FROM FILMS " +
-                "LEFT JOIN FILMDIRECTORS ON FILMDIRECTORS.FILMID = films.ID " +
-                "LEFT JOIN DIRECTORS ON DIRECTORS.directorid = FILMDIRECTORS.DIRECTORID " +
-                "WHERE LOWER(DIRECTORS.NAME) LIKE ?";
-        List<Film> films = jdbcTemplate.query(query, this::mapToFilm, "%" + queryStr.toLowerCase() + "%");
-        log.debug("Получены все Film по имени режиссёра {}", queryStr);
-        return films;
-    }
-
-    public List<Film> searchFilmForTitle(String queryStr) {
-        String query = "SELECT * FROM FILMS " +
-                "WHERE LOWER(FILMS.NAME) LIKE ?";
-        List<Film> films = jdbcTemplate.query(query, this::mapToFilm, "%" + queryStr.toLowerCase() + "%");
-        log.debug("Получены все Film по названию {}", queryStr);
-        return films;
-    }
-
-    public List<Film> searchFilmForTitleAndDirector(String queryStr) {
-        String query = "Select FILMS.id, FILMS.name, FILMS.description, FILMS.releaseDate, FILMS.duration, FILMS.mpaid "
-                +
-                "FROM FILMS " +
-                "LEFT JOIN FILMDIRECTORS ON FILMDIRECTORS.FILMID = films.ID " +
-                "LEFT JOIN DIRECTORS ON DIRECTORS.directorid = FILMDIRECTORS.DIRECTORID " +
-                "LEFT JOIN likes l ON FILMS.id = l.filmid " +
-                "WHERE LOWER(DIRECTORS.NAME) LIKE ? OR LOWER(FILMS.NAME) LIKE ? " +
-                "GROUP BY FILMS.id " +
-                "ORDER BY count(l.userid) DESC";
-        List<Film> films = jdbcTemplate.query(query, this::mapToFilm,
-                "%" + queryStr.toLowerCase() + "%", "%" + queryStr.toLowerCase() + "%");
-        log.debug("Получены все Film по названию и режиссёру");
-        return films;
-    }
-
     @Override
     public void deleteFilm(Long id) {
         String query = "DELETE FROM films WHERE id = ?";
@@ -226,55 +139,8 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    @Override
-    public List<Film> getCommonFilms(Long userId, Long friendId) {
-        String query = "SELECT * FROM films f "
-                + "LEFT JOIN likes l1 ON f.id = l1.filmid "
-                + "LEFT JOIN likes l2 ON f.id = l2.filmid "
-                + "WHERE l1.userId =? AND l2.userId =? "
-                + "GROUP BY f.id "
-                + "ORDER BY count (l1.userId) DESC";
-
-        List<Film> commonFilms = jdbcTemplate.query(query, this::mapToFilm, userId, friendId);
-        log.debug("Получены фильмы общие у Users userId {} и friend id {}.", userId, friendId);
-        return commonFilms;
-    }
-
-    @Override
     public List<Film> getTopFilms(Long count, Long genreId, Long year) {
-
-        // в случае если есть и genreid и year
-        String subquery = "WHERE g.id = " + genreId + " AND EXTRACT (YEAR FROM CAST (f.releasedate AS date)) = " + year
-                + " ";
-
-        // в случае если есть ТОЛЬКО year
-        if ((genreId == null || genreId == 0) && (year != null && year != 0)) {
-            subquery = "WHERE EXTRACT (YEAR FROM CAST (f.releasedate AS date)) = " + year + " ";
-
-            // в случае если есть ТОЛЬКО genreid
-        } else if ((year == null || year == 0) && (genreId != null && genreId != 0)) {
-            subquery = "WHERE g.id = " + genreId + " ";
-
-            // в случае если нет НЕТ НИ genreid НИ year
-        } else if ((year == null || year == 0) && (genreId == null || genreId == 0)) {
-            subquery = "";
-        }
-
-        String query =
-                "SELECT f.id, f.name, f.description, f.releaseDate, f.duration, f.mpaid "
-                        + "FROM films f "
-                        + "LEFT JOIN filmgenres fg ON f.id = fg.filmid "
-                        + "LEFT JOIN genres g ON fg.genreid = g.id "
-                        + "LEFT JOIN likes l ON f.id = l.filmid "
-                        + subquery
-                        + "GROUP BY f.id "
-                        + "ORDER BY COUNT(l.userid) DESC "
-                        + "LIMIT ?";
-
-
-        List<Film> topFilms = jdbcTemplate.query(query, this::mapToFilm, count);
-        log.debug("Получаем топ {} Film по кол-ву Likes.", count);
-        return topFilms;
+        return  null;
     }
 
     public Map<String, Object> filmToMap(Film film) {
