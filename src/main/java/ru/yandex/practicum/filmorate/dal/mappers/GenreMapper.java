@@ -1,19 +1,33 @@
-package ru.yandex.practicum.filmorate.dal.mappers;
+package ru.yandex.practicum.filmorate.mapper;
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
-public class GenreMapper implements RowMapper<Genre> {
-    @Override
-    public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Genre genre = new Genre();
-        genre.setId(rs.getInt("ID"));
-        genre.setName(rs.getString("NAME"));
-        return genre;
+public class GenreMapper {
+
+    private GenreMapper() {
     }
+
+    public static Genre dtoToGenre(GenreDTO genreDTO) {
+        return Genre.builder()
+                .id(genreDTO.getId())
+                .name(genreDTO.getName())
+                .build();
+    }
+
+    public static GenreDTO genreToDto(Genre genre) {
+        return GenreDTO.builder()
+                .id(genre.getId())
+                .name(genre.getName())
+                .build();
+    }
+
+    public static List<GenreDTO> listGenreToListDto(Collection<Genre> genres) {
+        return genres.stream().map(GenreMapper::genreToDto).collect(Collectors.toList());
+    }
+
 }
