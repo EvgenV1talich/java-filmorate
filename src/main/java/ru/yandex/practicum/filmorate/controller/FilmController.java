@@ -2,81 +2,86 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
-import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @Slf4j
+@RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
+    private final FilmService service;
 
-    private final FilmService filmService;
-    private final UserService userService;
-
-    @GetMapping("/films")
-    public Collection<FilmDTO> getFilms() {
-        return filmService.getFilms();
+    @PostMapping
+    public ResponseEntity<FilmDTO> createFilm(@RequestBody @Valid FilmDTO newFilm) {
+        log.info("POST  '/films' createFilm {}.", newFilm.getName());
+        return new ResponseEntity<>(service.createFilm(newFilm), HttpStatus.CREATED);
     }
 
-    @PostMapping("/films")
-    public ResponseEntity<FilmDTO> postFilm(@RequestBody @Valid FilmDTO film) {
-        System.out.println("--------------Пытаемся создать фильм-----------");
-        return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.CREATED);
+    @PutMapping
+    public ResponseEntity<FilmDTO> updateFilm(@RequestBody @Valid FilmDTO newFilm) {
+        log.info("PUT '/films' film ID {}.", newFilm.getId());
+        return new ResponseEntity<>(service.updateFilm(newFilm), HttpStatus.OK);
     }
 
-
-    @PutMapping("/films")
-    public ResponseEntity<FilmDTO> putFilm(@RequestBody Film film) {
-        if (!FilmValidator.validate(film)) {
-            log.error("Ошибка валидации фильма при запросе PUT /users");
-            throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные.");
-        }
-        if (!filmService.containsFilm(film.getId())) {
-            throw new FilmNotFoundException("Такой фильм не найден!");
-        } else {
-            return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.OK);
-        }
+    @GetMapping
+    public ResponseEntity<List<FilmDTO>> readAllFilmsList() {
+        log.info("GET '/films' all films");
+        return new ResponseEntity<>(service.readAllFilmsList(), HttpStatus.OK);
     }
 
-    @PutMapping("films/{id}/like/{userId}")
-    public void addLikeToFilm(@PathVariable Integer id, @PathVariable Long userId) {
-        filmService.addLikeToFilm(userId, id);
+    @PutMapping("{id}/like/{userId}")
+    public ResponseEntity<?> addLikeFromUser(@PathVariable Long id, @PathVariable Long userId) {
+        service.userLike(id, userId);
+        log.info(
+                "PUT  '/films/{}/like/{}' to add like to film (id {}) from user_id {}",
+                id, userId, id, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("films/{id}/like/{userId}")
-    public void removeLikeFromFilm(@PathVariable Integer id, @PathVariable Long userId) {
-        if (!filmService.containsFilm(id)) {
-            throw new FilmNotFoundException("Фильм с таким ID не найден!");
-        } /*else if (!userService.containsUser(userId)) {
-            throw new UserNotFoundException("Пользователь с таким ID не найден!");
-        }*/ else {
-            filmService.removeLikeToFilm(id, userId);
-        }
+    @DeleteMapping("{id}/like/{userId}")
+    public ResponseEntity<?> deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        service.deleteLikeById(id, userId);
+        log.info(
+                "DELETE '/films/{}/like/{}' to remove like from film_id {} from user_id{}",
+                id, userId, id, userId);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
-    @GetMapping("/films/popular")
-    public List<FilmDTO> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
-        /*if (count.isEmpty()) {
-            return filmService.getMostPopularFilms(10);
-        } else if (count.get() > filmService.getFilmsCount()) {
-            return filmService.getMostPopularFilms(filmService.getFilmsCount());
-        } else {
-            return filmService.getMostPopularFilms(count.get());
-        }*/
-        return null;
+    @GetMapping("/popular")
+    public ResponseEntity<List<FilmDTO>> getTopFilms(
+            @RequestParam(required = false, defaultValue = "10") Long count,
+            @RequestParam(required = false) Long genreId,
+            @RequestParam(required = false) Long year) {
+        log.info("GET '/films/popular' highest likes {} films",
+                count);
+        return new ResponseEntity<>(service.getTopLikedFilms(count), HttpStatus.OK);
     }
 
+    @GetMapping("{filmId}")
+    public ResponseEntity<FilmDTO> getFilm(@PathVariable Long filmId) {
+        log.info("GET '/films/{}'  film_id {}.", filmId, filmId);
+        return new ResponseEntity<>(service.getFilm(filmId), HttpStatus.OK);
+    }
+
+//    @GetMapping("/common")
+//    public ResponseEntity<List<FilmDTO>> getCommonFilms(@RequestParam Long userId, @RequestParam Long friendId) {
+//        log.info("Получен GET запрос по эндпоинту '/films/common' на получение общих Film у двух Users c ID {} и {}.",
+//                userId, friendId);
+//        return new ResponseEntity<>(service.getCommonFilms(userId, friendId), HttpStatus.OK);
+//    }
+
+    @DeleteMapping("/{filmId}")
+    public ResponseEntity<?> deleteFilm(@PathVariable Long filmId) {
+        log.info("DELETE '/films/{}' to remove film", filmId);
+        service.deleteFilm(filmId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
