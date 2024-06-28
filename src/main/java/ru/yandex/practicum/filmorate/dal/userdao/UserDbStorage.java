@@ -62,7 +62,7 @@ public class UserDbStorage implements UserStorage {
             log.debug(" User {} успешно обновлён", user.getId());
             return user;
         } else {
-            throw new EntityNotFoundException("User с таким id не найден");
+            throw new EntityNotFoundException("User с таким id не найден " + user.getId());
         }
 
     }
@@ -97,7 +97,7 @@ public class UserDbStorage implements UserStorage {
             user.setBirthday(userRows.getDate("birthday").toLocalDate());
             user.setFriends(getAllFriendsByUser(user.getId()));
         } else {
-            throw new EntityNotFoundException("Юзер с таким id не найден");
+            throw new EntityNotFoundException("Юзер с таким id не найден " + id);
         }
         return user;
         }

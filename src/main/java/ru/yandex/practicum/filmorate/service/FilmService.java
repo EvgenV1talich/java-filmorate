@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,10 @@ public class FilmService {
         return null;
     }
     public Collection<FilmDTO> getFilms() {
-        return mapper.filmsToDTO(((List<Film>) filmStorage.getFilms().values()));
+        var films = filmStorage.getFilms();
+        List<Film> f = new ArrayList<>();
+        films.values().stream().map(s->f.add(s)).collect(Collectors.toList());
+        return mapper.filmsToDTO(f);
     }
     public FilmDTO createFilm(FilmDTO film) {
         return mapper.filmToDTO(filmStorage.createFilm(mapper.DTOToFilm(film)));

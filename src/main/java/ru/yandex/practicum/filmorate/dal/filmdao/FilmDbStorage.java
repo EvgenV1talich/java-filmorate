@@ -65,15 +65,15 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void updateFilm(Film film) {
-        String query = "UPDATE FILMS\n" +
-                "SET NAME=?, DESCRIPTION=?, RELEASE_DATE=?, DURATION=?\n" +
-                "WHERE ID=?;";
+        String query = "UPDATE FILMS " +
+                "SET NAME=?, DESCRIPTION=?, RELEASE_DATE=?, DURATION=? WHERE ID=?;";
         int rowsUpdated = jdbcTemplate.update(query,
-                film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
-                film.getDuration());
+                film.getDuration(),
+                film.getId()
+                );
         if (rowsUpdated == 0) {
             throw new RuntimeException("Не удалось обновить данные");
         }
@@ -93,8 +93,13 @@ public class FilmDbStorage implements FilmStorage {
     public Film getFilm(Integer filmId) {
         String query = "SELECT ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION " +
                 " FROM FILMS " +
-                " WHERE ID = :filmId";
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, filmId);
+                " WHERE ID = ?";
+        SqlRowSet sqlRowSet  =null;
+        try {
+            sqlRowSet = jdbcTemplate.queryForRowSet(query, filmId);
+        }catch(Exception e){
+            int a = 0;
+        }
         if (sqlRowSet.first()) {
             Film film = new Film();
             film.setId(sqlRowSet.getInt("ID"));
@@ -149,7 +154,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public boolean contains(Integer id) {
-        String query = "EXISTS(SELECT ID FROM FILMS WHERE ID = :id);";
+        String query = "EXISTS(SELECT ID FROM FILMS WHERE ID = :?);";
         return (jdbcTemplate.update(query, id)) > 0;
     }
 
