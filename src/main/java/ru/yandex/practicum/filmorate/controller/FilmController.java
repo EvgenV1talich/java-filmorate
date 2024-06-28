@@ -46,7 +46,7 @@ public class FilmController {
         if (!filmService.containsFilm(film.getId())) {
             throw new FilmNotFoundException("Такой фильм не найден!");
         } else {
-            return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.CREATED);
+            return new ResponseEntity<>(filmService.updateFilm(film), HttpStatus.OK);
         }
     }
 

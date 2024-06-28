@@ -17,7 +17,6 @@ public class UserDTO {
     @NotBlank
     private String login;
     private String name;
-    @Past
     private LocalDate birthday;
 
 }

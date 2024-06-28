@@ -46,8 +46,10 @@ public class UserService {
         return userStorage;
     }
     public UserDTO updateUser(UserDTO userDto) {
+
         User user  = userStorage.updateUser(mapper.DTOToUser(userDto));
         return mapper.userToDTO(userStorage.updateUser(user));
+
     }
 
     public UserDTO createUser(UserDTO user) {
