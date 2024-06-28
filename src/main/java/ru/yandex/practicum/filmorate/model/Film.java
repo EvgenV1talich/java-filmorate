@@ -24,7 +24,6 @@ public class Film {
     private LocalDate releaseDate;
     private Integer duration;
     private ArrayList<Genre> genre;
-    private MPA mpa;
     private Set<Long> likesFromUsers;
 
     public Film(Integer id,
@@ -32,15 +31,13 @@ public class Film {
                 String description,
                 LocalDate releaseDate,
                 Integer duration,
-                ArrayList<Genre> genre,
-                MPA mpa) {
+                ArrayList<Genre> genre) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
         this.genre = genre;
-        this.mpa = mpa;
         this.likesFromUsers = new TreeSet<Long>();
     }
 

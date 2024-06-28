@@ -45,7 +45,7 @@ public class FilmService {
         return null;
     }
     public Collection<FilmDTO> getFilms() {
-        return mapper.filmsToDTO((List<Film>) filmStorage.getFilms().values());
+        return mapper.filmsToDTO(((List<Film>) filmStorage.getFilms().values()));
     }
     public FilmDTO createFilm(FilmDTO film) {
         return mapper.filmToDTO(filmStorage.createFilm(mapper.DTOToFilm(film)));

@@ -91,9 +91,9 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilm(Integer filmId) {
-        String query = "SELECT ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION\n" +
-                "FROM FILMS\n" +
-                "WHERE ID = :filmId";
+        String query = "SELECT ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION " +
+                " FROM FILMS " +
+                " WHERE ID = :filmId";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, filmId);
         if (sqlRowSet.first()) {
             Film film = new Film();
@@ -104,7 +104,6 @@ public class FilmDbStorage implements FilmStorage {
             film.setDuration(sqlRowSet.getInt("DURATION"));
             film.setGenre(genreStorage.getGenresByFilm(sqlRowSet.getInt("ID")));
             film.setLikesFromUsers(likeDbStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
-            film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("ID")));
             /*Film film = Film.builder()
                     .id(sqlRowSet.getLong("id"))
                     .name(sqlRowSet.getString("name"))
@@ -130,8 +129,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public HashMap<Integer, Film> getFilms() {
-        String query = "SELECT ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION\n" +
-                "FROM FILMS;";
+        String query = "SELECT ID, NAME, DESCRIPTION, RELEASE_DATE, DURATION FROM FILMS;";
 
         HashMap<Integer, Film> filmHashMap = new HashMap<>();
         List<Film> filmsList = jdbcTemplate.query(query, filmMapper);
@@ -152,7 +150,7 @@ public class FilmDbStorage implements FilmStorage {
 
     public boolean contains(Integer id) {
         String query = "EXISTS(SELECT ID FROM FILMS WHERE ID = :id);";
-        return (jdbcTemplate.update(query)) > 0;
+        return (jdbcTemplate.update(query, id)) > 0;
     }
 
     /*public Integer getCount() {

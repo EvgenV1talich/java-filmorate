@@ -34,7 +34,6 @@ public class FilmRowMapper implements RowMapper<Film> {
         film.setDuration(DTO.getDuration());
         film.setLikesFromUsers(DTO.getLikes());
         film.setGenre(DTO.getGenre());
-        film.setMpa(DTO.getMpa());
         return film;
     }
 
@@ -51,7 +50,6 @@ public class FilmRowMapper implements RowMapper<Film> {
                 .duration(film.getDuration())
                 .likes(film.getLikesFromUsers())
                 .genre(film.getGenre())
-                .mpa(film.getMpa())
                 .build();
     }
     public List<FilmDTO> filmsToDTO(List<Film> filmList) {

@@ -14,16 +14,17 @@ public class FilmValidatorTest {
     @Test
     public void filmTitleValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        MPA mpa = new MPA(0, "G");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre),mpa);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));
+        MPA mpa = new MPA(0, "G", film.getId());
+
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
     }
 
     @Test
     public void filmDescriptionValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        MPA mpa = new MPA(0, "G");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre),mpa);;
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));;
+        MPA mpa = new MPA(0, "G", film.getId());
         film.setDescription("looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooo" +
@@ -43,16 +44,16 @@ public class FilmValidatorTest {
     @Test
     public void filmReleaseDateValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        MPA mpa = new MPA(0, "G");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre),mpa);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, new ArrayList<>((Collection) genre));
+        MPA mpa = new MPA(0, "G", film.getId());
         Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
 
     @Test
     public void filmDurationValidationTest() {
         Genre genre = new Genre(0, "Комедия");
-        MPA mpa = new MPA(0, "G");
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, new ArrayList<>((Collection) genre),mpa);
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, new ArrayList<>((Collection) genre));
+        MPA mpa = new MPA(0, "G", film.getId());
         Assertions.assertFalse(FilmValidator.filmDurationValidation(film.getDuration()));
     }
 }
