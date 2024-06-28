@@ -12,11 +12,14 @@ import java.time.LocalDate;
 public class UserDTO {
 
     private Long id;
+
     @NotBlank
     private String email;
+
     @NotBlank
     private String login;
-    private String name;
-    private LocalDate birthday;
 
+    private String name;
+    @Past
+    private LocalDate birthday;
 }

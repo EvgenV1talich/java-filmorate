@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
-import ru.yandex.practicum.filmorate.model.MPA;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FilmRowMapper implements RowMapper<Film> {
+public class FilmMapper implements RowMapper<Film> {
 
     MpaDbStorage mpaDbStorage;
     @Override

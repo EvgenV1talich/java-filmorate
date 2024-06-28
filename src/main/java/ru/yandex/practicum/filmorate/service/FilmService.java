@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmDbStorage;
-import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
+import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -21,7 +21,7 @@ public class FilmService {
 
     private final FilmDbStorage filmStorage;
     private final UserDbStorage userStorage;
-    private final FilmRowMapper mapper;
+    private final FilmMapper mapper;
 
 
     public void addLikeToFilm(Long userId, Integer filmId) {

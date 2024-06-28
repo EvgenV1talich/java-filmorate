@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.dal.mappers.GenreRowMapper;
+import ru.yandex.practicum.filmorate.dal.mappers.GenreMapper;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 public class GenreDbStorage implements GenreDAO {
 
     private final JdbcTemplate jdbcTemplate;
-    private final GenreRowMapper genreMapper;
+    private final GenreMapper genreMapper;
 
     @Override
     public Genre getById(Integer id) {
