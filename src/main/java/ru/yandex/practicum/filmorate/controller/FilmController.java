@@ -34,12 +34,9 @@ public class FilmController {
     @PostMapping("/films")
     public ResponseEntity<FilmDTO> postFilm(@RequestBody @Valid FilmDTO film) {
         System.out.println("--------------Пытаемся создать фильм-----------");
-        if(if exist){
-
-        } else{
-            return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(filmService.createFilm(film), HttpStatus.CREATED);
     }
+
 
     @PutMapping("/films")
     public ResponseEntity<FilmDTO> putFilm(@RequestBody Film film) {

@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
@@ -32,31 +33,21 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film createFilm(Film film) {
 
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("FILMS")
-                .usingGeneratedKeyColumns("ID");
-        Number id = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
-        log.info("Create new film: generated id = " + id);
-        film.setId((Integer) id);
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("films")
+                .usingGeneratedKeyColumns("id");
+        Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
+        film.setId((Integer) key);
+        film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
+
+        if (film.getGenre() != null && !film.getGenre().isEmpty()) {
+            String query = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES (?,?)";
+            for (Genre genre : film.getGenre()) {
+                jdbcTemplate.update(query, film.getId(), genre.getId());
+            }
+        }
+        film.addGenre(genreStorage.getById(film.getId()));
+        log.info("Film c ID {} сохранён.", film.getId());
         return film;
-
-
-
-//        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("films")
-//                .usingGeneratedKeyColumns("id");
-//        Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
-//        film.setId((Integer) key);
-//        film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
-//
-//        if (film.getGenre() != null && !film.getGenre().isEmpty()) {
-//            String query = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES (?,?)";
-//            for (Genre genre : film.getGenre()) {
-//                jdbcTemplate.update(query, film.getId(), genre.getId());
-//            }
-//        }
-//        film.addGenre(genreStorage.getById(film.getId()));
-//        log.info("Film c ID {} сохранён.", film.getId());
-//        return film;
     }
 
     @Override
