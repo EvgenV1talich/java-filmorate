@@ -83,20 +83,7 @@ VALUES (4, 'R');
 INSERT INTO mpa (id, name)
 VALUES (5, 'NC-17');
 
-ALTER TABLE IF EXISTS MPA
-    ALTER COLUMN ID RESTART WITH 6;
 
-
-INSERT INTO FILMS (id, DESCRIPTION, release_date, duration, mpa_id)
-VALUES (1, 'xxxxx', '2022-03-12', 1, 1);
-INSERT INTO FILMS (id, DESCRIPTION, release_date, duration, mpa_id)
-VALUES (2, 'xxxxx', '2021-04-11', 2, 2);
-INSERT INTO FILMS (id, DESCRIPTION, release_date, duration, mpa_id)
-VALUES (3, 'xxxxx', '2023-08-22', 3, 3);
-INSERT INTO FILMS (id, DESCRIPTION, release_date, duration, mpa_id)
-VALUES (4, 'xxxxx', '2024-10-26', 4, 4);
-INSERT INTO FILMS (id, DESCRIPTION, release_date, duration, mpa_id)
-VALUES (5, 'xxxxx', '2020-11-14', 5, 5);
 
 
 INSERT INTO genres (id, name)
@@ -112,23 +99,4 @@ VALUES (5, 'Документальный');
 INSERT INTO genres (id, name)
 VALUES (6, 'Боевик');
 
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (1, 'asd1@ss.ss', '1asdasd12', 'asdfasdf', '2000-01-14');
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (2, 'asd2@ss.ss', '2asdasd12', 'asdfasdf', '2001-01-14');
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (3, 'asd3@ss.ss', '3asdasd12', 'asdfasdf', '2002-01-14');
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (4, 'asd4@ss.ss', '4asdasd12', 'asdfasdf', '2003-01-14');
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (5, 'asd5@ss.ss', '5asdasd12', 'asdfasdf', '2004-01-14');
-INSERT INTO users (id, email, login, name, birthday)
-VALUES (6, 'asd6@ss.ss', '6asdasd12', 'asdfasdf', '2005-01-14');
 
-
-ALTER TABLE IF EXISTS FILMS
-    ALTER COLUMN ID RESTART WITH 6;
-ALTER TABLE IF EXISTS USERS
-    ALTER COLUMN ID RESTART WITH 7;
-ALTER TABLE IF EXISTS MPA
-    ALTER COLUMN ID RESTART WITH 6;

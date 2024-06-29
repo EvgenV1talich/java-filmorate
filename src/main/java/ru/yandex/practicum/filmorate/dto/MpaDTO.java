@@ -8,6 +8,6 @@ import lombok.Data;
 public class MpaDTO {
 
     private Integer id;
-    private String rate;
+    private String name;
 
 }
