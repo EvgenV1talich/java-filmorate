@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.validators;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -9,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class FilmValidatorTest {
     @Test
@@ -18,7 +16,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
-        MPA mpa = new MPA(0, "G", film.getId());
+        MPA mpa = new MPA(0, "G");
 
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
     }
@@ -28,8 +26,9 @@ public class FilmValidatorTest {
         Genre genre = new Genre(0, "Комедия");
         var v = new ArrayList<Genre>();
         v.add(genre);
-        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);;
-        MPA mpa = new MPA(0, "G", film.getId());
+        Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
+        ;
+        MPA mpa = new MPA(0, "G");
         film.setDescription("looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooo" +
@@ -52,7 +51,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
-        MPA mpa = new MPA(0, "G", film.getId());
+        MPA mpa = new MPA(0, "G");
         Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
 
@@ -62,7 +61,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, v);
-        MPA mpa = new MPA(0, "G", film.getId());
+        MPA mpa = new MPA(0, "G");
         Assertions.assertFalse(FilmValidator.filmDurationValidation(film.getDuration()));
     }
 }
