@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Repository
@@ -95,7 +96,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         return film;
     }
-    private boolean genreExists(List<Genre> filmGenres, List<Genre> dbGenres) {
+    private boolean genreExists(Set<Genre> filmGenres, Set<Genre> dbGenres) {
         List<Integer> genresInDbIds = new ArrayList<>();
         List<Integer> filmGenresIds = new ArrayList<>();
         for (Genre genre : dbGenres) {

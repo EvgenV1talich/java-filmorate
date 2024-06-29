@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<Genre> getAll() {
+    public Set<Genre> getAll() {
         return genreDbStorage.getAll();
     }
 }

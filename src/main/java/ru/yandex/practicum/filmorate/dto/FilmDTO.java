@@ -31,7 +31,7 @@ public class FilmDTO {
     @PositiveOrZero
     private Integer duration;
     private Set<Long> likes;
-    private ArrayList<Genre> genres;
+    private Set<Genre> genres;
     @NotNull
     private MPA mpa;
 }
