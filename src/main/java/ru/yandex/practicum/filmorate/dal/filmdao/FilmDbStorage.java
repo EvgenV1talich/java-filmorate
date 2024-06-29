@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -126,7 +127,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(sqlRowSet.getString("description"));
             film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());
             film.setDuration(sqlRowSet.getInt("duration"));
-            film.setGenre(genreStorage.getGenresByFilm(sqlRowSet.getInt("id")));
+            film.setGenre(removeDublicates(genreStorage.getGenresByFilm(sqlRowSet.getInt("id"))));
             film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
             film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("mpa_id")));
             log.debug("Get film {}.", id);
@@ -144,7 +145,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setDescription(sqlRowSet.getString("description"));
         film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());
         film.setDuration(sqlRowSet.getInt("duration"));
-        film.setGenre(genreStorage.getGenresByFilm(sqlRowSet.getInt("id")));
+        film.setGenre(removeDublicates(genreStorage.getGenresByFilm(sqlRowSet.getInt("id"))));
         film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
         try {
             MPA mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
@@ -165,6 +166,10 @@ public class FilmDbStorage implements FilmStorage {
         } else {
             log.info("Film {} not found", id);
         }
+    }
+    private ArrayList<Genre> removeDublicates(ArrayList<Genre> listWithDublicates) {
+        List<Genre> listWithoutDublicates = listWithDublicates.stream().distinct().collect(Collectors.toList());
+        return (ArrayList<Genre>) listWithoutDublicates;
     }
 
     public List<Film> getTopFilms(Long count) {
