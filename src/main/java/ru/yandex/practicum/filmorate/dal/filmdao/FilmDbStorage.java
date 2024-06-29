@@ -48,6 +48,7 @@ public class FilmDbStorage implements FilmStorage {
         Integer key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film)).intValue();
         film.setId(Integer.parseInt(String.valueOf(key)));
         film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
+        log.info("MPA = " + film.getMpa().toString());
         if (film.getGenre() != null && !film.getGenre().isEmpty()) {
             String query = "INSERT INTO films_genres (film_id,genre_id) VALUES (?,?)";
             for (Genre genre : film.getGenre()) {
@@ -85,8 +86,7 @@ public class FilmDbStorage implements FilmStorage {
                 jdbcTemplate.update(sqlUpdate, film.getId(), genre.getId());
             }
         }
-        film.setGenre((ArrayList<Genre>) genreStorage.getGenresByFilm(film.getId()));
-        //return film;
+        film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         return film;
     }
 
@@ -103,7 +103,6 @@ public class FilmDbStorage implements FilmStorage {
         String query = "SELECT * FROM films WHERE id = ?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, id);
         if (sqlRowSet.first()) {
-            //TODO remove builder
             Film film = new Film();
             film.setId(sqlRowSet.getInt("id"));
             film.setName(sqlRowSet.getString("name"));
@@ -112,7 +111,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setDuration(sqlRowSet.getInt("duration"));
             film.setGenre(genreStorage.getGenresByFilm(sqlRowSet.getInt("id")));
             film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
-            film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("id")));
+            film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("mpa_id")));
             log.debug("Get film {}.", id);
             return film;
         } else {
@@ -123,6 +122,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film mapToFilm(ResultSet sqlRowSet, int rowNum) throws SQLException {
         Film film = new Film();
         film.setId(sqlRowSet.getInt("id"));
+        //TODO почему не достаётся имя???
         film.setName(sqlRowSet.getString("name"));
         film.setDescription(sqlRowSet.getString("description"));
         film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());

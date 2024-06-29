@@ -16,10 +16,10 @@ public class MpaMapper {
     }
 
     public MPA dtoToMpa(MpaDTO mpaDTO) {
-        return MPA.builder()
-                .id(mpaDTO.getId())
-                .rate(mpaDTO.getRate())
-                .build();
+        MPA mpa = new MPA();
+        mpa.setId(mpaDTO.getId());
+        mpa.setRate(mpaDTO.getRate());
+        return mpa;
     }
 
     public MpaDTO mpaToDto(MPA mpa) {

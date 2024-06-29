@@ -43,7 +43,7 @@ public class LikesDbStorage implements LikesDAO {
     @Override
     public Set<Long> getLikerByFilmId(Integer filmID) {
         String query = "SELECT user_id FROM films_users WHERE film_id = ?";
-        List<Long> likes = jdbcTemplate.query(query, (rs, rowNum) -> rs.getLong("userid"), filmID);
+        List<Long> likes = jdbcTemplate.query(query, (rs, rowNum) -> rs.getLong("user_id"), filmID);
         log.debug("Get users who liked film id={}.", filmID);
         return new HashSet<>(likes);
     }

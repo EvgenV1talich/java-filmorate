@@ -2,12 +2,17 @@ package ru.yandex.practicum.filmorate.service.film;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmStorage;
+import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
+import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.likes.LikesService;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
@@ -25,6 +30,8 @@ public class FilmServiceImpl implements FilmService {
     private final FilmStorage filmStorage;
     private final UserService userService;
     private final LikesService likeService;
+    private final MpaDbStorage mpaStorage;
+    private final GenreDbStorage genreDbStorage;
     private final FilmMapper mapper;
 
     @Override
@@ -35,8 +42,11 @@ public class FilmServiceImpl implements FilmService {
             return mapper.filmToDTO(filmStorage.createFilm(film));
         }
         throw new FilmValidationException("Invalid film" + filmDTO);*/
+        if (FilmValidator.validate(mapper.dtoToFilm(filmDTO))
+                && FilmValidator.filmMpaValidation(filmDTO.getMpa(), mpaStorage.readAll())
+                && FilmValidator.filmGenreValidation(filmDTO.getGenres(), (ArrayList<Genre>) genreDbStorage.getAll())) {
         Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
-        if (FilmValidator.validate(film)) {
+
             log.debug("Film {} saved.", filmDTO.getId());
             return mapper.filmToDTO(film);
         } throw  new FilmValidationException("Invalid film!");

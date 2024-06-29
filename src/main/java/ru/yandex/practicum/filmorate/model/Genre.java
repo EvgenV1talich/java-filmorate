@@ -1,12 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 public class Genre {
 

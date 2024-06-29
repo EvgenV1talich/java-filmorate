@@ -55,6 +55,7 @@ public class FilmMapper {
 
     public List<FilmDTO> listFilmsToListDto(Collection<Film> films) {
         List<FilmDTO> filmDTOS = new ArrayList<>();
+        //TODO fix null name
         for (Film film : films) {
             filmDTOS.add(filmToDTO(film));
         }

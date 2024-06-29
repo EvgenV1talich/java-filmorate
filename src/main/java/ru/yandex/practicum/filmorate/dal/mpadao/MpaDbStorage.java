@@ -44,9 +44,9 @@ public class MpaDbStorage implements MpaStorage {
     }
 
     public MPA mapToMpa(ResultSet rs, int rowNum) throws SQLException {
-        return MPA.builder()
-                .id(rs.getInt("id"))
-                .rate(rs.getString("rate"))
-                .build();
+        MPA mpa = new MPA();
+        mpa.setId(rs.getInt("id"));
+        mpa.setRate(rs.getString("rate"));
+        return mpa;
     }
 }
