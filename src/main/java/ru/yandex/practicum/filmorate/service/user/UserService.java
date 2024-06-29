@@ -22,4 +22,6 @@ public interface UserService {
 
     void deleteUser(Long id);
 
+    List<UserDTO> getSameFriendsList(Long user1Id, Long user2Id);
+
 }

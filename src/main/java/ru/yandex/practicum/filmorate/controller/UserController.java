@@ -64,13 +64,13 @@ public class UserController {
         return new ResponseEntity<>(userService.readAllFriendsByUserId(id), HttpStatus.OK);
     }
 
-//    @GetMapping("{id}/friends/common/{otherId}")
-//    public ResponseEntity<List<UserDTO>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-//        log.info(
-//                "Получен GET запрос по эндпоинту '/users/{}/friends/common/{}' на получение всех общих друзей у Users c ID {} и {}.",
-//                id, otherId, id, otherId);
-//        return new ResponseEntity<>(userService.getCommonFriends(id, otherId), HttpStatus.OK);
-//    }
+    @GetMapping("{id}/friends/common/{otherId}")
+    public ResponseEntity<List<UserDTO>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        log.info(
+                "Получен GET запрос по эндпоинту '/users/{}/friends/common/{}' на получение всех общих друзей у Users c ID {} и {}.",
+                id, otherId, id, otherId);
+        return new ResponseEntity<>(userService.getSameFriendsList(id, otherId), HttpStatus.OK);
+    }
 
     @GetMapping("{userId}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {

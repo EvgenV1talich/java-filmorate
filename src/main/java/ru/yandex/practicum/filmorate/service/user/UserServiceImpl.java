@@ -11,8 +11,10 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -79,9 +81,22 @@ public class UserServiceImpl implements UserService {
         return friends;
     }
 
+
     @Override
     public void deleteUser(Long id) {
         userStorage.deleteUser(id);
+    }
+
+    @Override
+    public List<UserDTO> getSameFriendsList(Long user1Id, Long user2Id) {
+        Set<Long> ids = new HashSet<>(userStorage.getUser(user1Id).getFriends());
+        List<UserDTO> users = new ArrayList<>();
+        ids.retainAll(userStorage.getUser(user2Id).getFriends());
+        log.debug("Получен список общих друзей у User с ID {} и User c ID {}.", user1Id, user2Id);
+        for (Long id : ids) {
+            users.add(mapper.userToDTO(userStorage.getUser(id)));
+        }
+        return users;
     }
 
 }

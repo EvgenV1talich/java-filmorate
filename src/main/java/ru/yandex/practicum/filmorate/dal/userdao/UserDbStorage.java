@@ -15,6 +15,7 @@ import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.ResultSet;
@@ -97,8 +98,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void userAddFriend(Long userId, Long friendId) {
-        User user = getUser(userId);
-        User friend = getUser(friendId); // если юзер отсутствует - будет выброшено исключение
+        if (!UserValidator.validate(getUser(userId)) || !UserValidator.validate(getUser(friendId))) {
+            throw new UserValidationException("Invalid user!");
+        }
+
         String query = "INSERT INTO users_friends (request_user_id, response_user_id) VALUES (?,?)";
         try {
             jdbcTemplate.update(query, userId, friendId);
@@ -112,14 +115,14 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void userDeleteFriend(Long userId, Long friendId) {
-        //TODO: доделать валидацию
-        getUser(userId); // для валидации
-        getUser(friendId); // для валидации
+        if (!UserValidator.validate(getUser(userId)) || !UserValidator.validate(getUser(friendId))) {
+            throw new UserValidationException("Invalid user!");
+        }
         String query = "DELETE FROM users_friends WHERE request_user_id = ? AND response_user_id = ?";
         if (jdbcTemplate.update(query, userId, friendId) != 0) {
             log.debug("Remove friendship between {} and {}", userId, friendId);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            throw new ResponseStatusException(HttpStatus.OK, "User not found");
         }
 
     }

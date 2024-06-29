@@ -3,13 +3,16 @@ package ru.yandex.practicum.filmorate.dal.filmdao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
+import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
@@ -33,16 +36,18 @@ public class FilmDbStorage implements FilmStorage {
     private final MpaDbStorage mpaDBStorage;
     private final GenreDbStorage genreStorage;
     private final LikesDbStorage likeDBStorage;
-
+    private final FilmMapper mapper;
 
     @Override
     public Film createFilm(Film film) {
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("films")
-                .usingGeneratedKeyColumns("ID");
-        Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("films")
+                .usingColumns("name", "description", "release_date", "duration", "mpa_id")
+                .usingGeneratedKeyColumns("id");
+        //TODO BUG
+        Integer key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film)).intValue();
         film.setId(Integer.parseInt(String.valueOf(key)));
         film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
-
         if (film.getGenre() != null && !film.getGenre().isEmpty()) {
             String query = "INSERT INTO films_genres (film_id,genre_id) VALUES (?,?)";
             for (Genre genre : film.getGenre()) {
@@ -149,7 +154,9 @@ public class FilmDbStorage implements FilmStorage {
         temp.put("description", film.getDescription());
         temp.put("release_date", film.getReleaseDate());
         temp.put("duration", film.getDuration());
+        //TODO MAYBE BUG
         temp.put("mpa_id", film.getMpa().getId());
+
         return temp;
     }
 }

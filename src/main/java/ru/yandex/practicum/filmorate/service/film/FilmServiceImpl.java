@@ -29,12 +29,17 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDTO createFilm(FilmDTO filmDTO) {
-        Film film = mapper.dtoToFilm(filmDTO);
+ /*       Film film = mapper.dtoToFilm(filmDTO);
         if (FilmValidator.validate(film)) {
             log.debug("Film {} saved.", filmDTO.getId());
             return mapper.filmToDTO(filmStorage.createFilm(film));
         }
-        throw new FilmValidationException("Invalid film" + filmDTO);
+        throw new FilmValidationException("Invalid film" + filmDTO);*/
+        Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
+        if (FilmValidator.validate(film)) {
+            log.debug("Film {} saved.", filmDTO.getId());
+            return mapper.filmToDTO(film);
+        } throw  new FilmValidationException("Invalid film!");
     }
 
     @Override

@@ -41,7 +41,6 @@ public class FilmMapper {
         if (filmDTO == null) {
             throw new IllegalArgumentException("filmDTO cannot be null");
         }
-        //TODO remove builder
         Film film = new Film();
         film.setId(filmDTO.getId());
         film.setName(filmDTO.getName());
