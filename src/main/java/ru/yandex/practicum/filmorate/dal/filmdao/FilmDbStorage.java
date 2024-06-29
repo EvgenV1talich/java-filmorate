@@ -153,7 +153,7 @@ public class FilmDbStorage implements FilmStorage {
             MPA mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
             film.setMpa(mpa);
         } catch (Exception e) {
-
+            log.info("Exception when create film in mapper.");
         }
 
         log.debug("Get film {}.", film.getId());
