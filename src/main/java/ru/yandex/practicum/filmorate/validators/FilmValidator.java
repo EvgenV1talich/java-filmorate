@@ -41,6 +41,7 @@ public class FilmValidator {
         LocalDate minDate = LocalDate.of(1895, 12, 28);
         return !date.isBefore(minDate);
     }
+
     public static boolean filmMpaValidation(MPA mpa, List<MPA> mpas) {
         ArrayList<Integer> mpaIds = new ArrayList<>();
         for (MPA mpaTemp : mpas) {
@@ -48,6 +49,7 @@ public class FilmValidator {
         }
         return mpaIds.contains(mpa.getId());
     }
+
     public static boolean filmGenreValidation(ArrayList<Genre> filmGenres, ArrayList<Genre> dbGenres) {
         ArrayList<Integer> filmGenresIds = new ArrayList<>();
         ArrayList<Integer> dbGenresIds = new ArrayList<>();
@@ -59,6 +61,7 @@ public class FilmValidator {
         }
         return dbGenresIds.containsAll(filmGenresIds);
     }
+
     public static boolean filmDurationValidation(Integer duration) {
         return (duration >= 0);
     }

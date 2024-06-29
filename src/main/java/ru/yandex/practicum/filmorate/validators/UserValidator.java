@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.validators;
 
 import ru.yandex.practicum.filmorate.model.User;
+
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
