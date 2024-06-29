@@ -11,19 +11,18 @@ import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmDbStorage;
 import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
-import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:schema.sql")
@@ -37,8 +36,7 @@ class FilmorateApplicationTests {
     private final GenreDbStorage genreDBStorage;
     private final LikesDbStorage likeDBStorage;
     private final MpaDbStorage mpaDBStorage;
-    private final UserService userService;
-    private final FilmService filmService;
+
     @DisplayName("Тест получения корректного имени Genre по ID")
     @Test
     public void findGenreByIdTest() {
@@ -120,7 +118,7 @@ class FilmorateApplicationTests {
     public void readAllUsers() {
         User user = new User(1L, "htaehaethaeht@mail.ru", "haethaeh", "haeeah", LocalDate.of(1999, 1, 1));
         User user2 = new User(2L, "fafafa@mail.ru", "hatehaethaeh", "hae", LocalDate.of(1999, 1, 1));
-        User user3= new User(3L, "rgeatehahet@mail.ru", "hthaeaeh", "aehaheaeh", LocalDate.of(1999, 1, 1));
+        User user3 = new User(3L, "rgeatehahet@mail.ru", "hthaeaeh", "aehaheaeh", LocalDate.of(1999, 1, 1));
         userDBStorage.createUser(user);
         userDBStorage.createUser(user2);
         userDBStorage.createUser(user3);
@@ -153,6 +151,7 @@ class FilmorateApplicationTests {
         filmDBStorage.updateFilm(film);
         Assertions.assertEquals(film, filmDBStorage.getFilm(1), "Ожидался коррктный Film после update");
     }
+
     @DisplayName("Тест DELETE существующего Film по ID")
     @Test
     public void deleteFilmTest() {
