@@ -3,10 +3,12 @@ package ru.yandex.practicum.filmorate.dal.filmdao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
@@ -52,6 +54,8 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre genre : film.getGenre()) {
                     jdbcTemplate.update(query, film.getId(), genre.getId());
                 }
+            } else {
+                throw new ResponseStatusException(HttpStatus.valueOf(400));
             }
         }
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
