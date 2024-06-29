@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.dal.likesdao;
 
-import java.util.List;
 import java.util.Set;
 
 public interface LikesDAO {

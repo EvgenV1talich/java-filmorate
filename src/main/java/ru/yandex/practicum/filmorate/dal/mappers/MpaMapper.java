@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import ru.yandex.practicum.filmorate.model.MPA;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

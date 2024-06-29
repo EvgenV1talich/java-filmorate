@@ -6,11 +6,13 @@ import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MpaServiceImpl implements MpaService {
 
     private final MpaDbStorage mpaDbStorage;
+
     @Override
     public List<MPA> readAll() {
         return mpaDbStorage.readAll();

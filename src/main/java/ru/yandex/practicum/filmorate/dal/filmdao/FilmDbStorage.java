@@ -50,7 +50,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
         log.info("MPA = " + film.getMpa().toString());
         if (film.getGenre() != null && !film.getGenre().isEmpty()) {
-            if(genreExists(film.getGenre(), genreStorage.getAll())) {
+            if (genreExists(film.getGenre(), genreStorage.getAll())) {
                 String query = "INSERT INTO films_genres (film_id,genre_id) VALUES (?,?)";
                 for (Genre genre : film.getGenre()) {
                     jdbcTemplate.update(query, film.getId(), genre.getId());
@@ -63,6 +63,7 @@ public class FilmDbStorage implements FilmStorage {
         log.debug("Film (id={}) saved.", film.getId());
         return film;
     }
+
     public Integer getFilmsCount() {
         return getFilms().size();
     }
@@ -96,6 +97,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         return film;
     }
+
     private boolean genreExists(List<Genre> filmGenres, List<Genre> dbGenres) {
         List<Integer> genresInDbIds = new ArrayList<>();
         List<Integer> filmGenresIds = new ArrayList<>();
@@ -150,7 +152,7 @@ public class FilmDbStorage implements FilmStorage {
         try {
             MPA mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
             film.setMpa(mpa);
-        } catch(Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -167,6 +169,7 @@ public class FilmDbStorage implements FilmStorage {
             log.info("Film {} not found", id);
         }
     }
+
     private ArrayList<Genre> removeDublicates(ArrayList<Genre> listWithDublicates) {
         List<Genre> listWithoutDublicates = listWithDublicates.stream().distinct().collect(Collectors.toList());
         return (ArrayList<Genre>) listWithoutDublicates;

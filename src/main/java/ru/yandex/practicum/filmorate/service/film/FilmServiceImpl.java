@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmStorage;
-import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;

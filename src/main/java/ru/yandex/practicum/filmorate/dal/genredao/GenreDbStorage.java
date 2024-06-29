@@ -8,10 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.Genre;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -42,7 +42,7 @@ public class GenreDbStorage implements GenreDAO {
         String sqlQuery = "SELECT * FROM genres ORDER BY id";
         log.debug("Все Genres получены.");
 
-        var v =  jdbcTemplate.query(sqlQuery, this::mapToGenre);
+        var v = jdbcTemplate.query(sqlQuery, this::mapToGenre);
 
         return new ArrayList<>(v);
 

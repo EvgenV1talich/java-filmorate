@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -77,6 +76,7 @@ public class Film {
                 ", duration=" + duration +
                 '}';
     }
+
     public void addGenre(Genre newGenre) {
         genre.add(newGenre);
     }

@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service.film;
 
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface FilmService {

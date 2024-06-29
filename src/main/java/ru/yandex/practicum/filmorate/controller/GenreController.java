@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.dal.mappers.GenreMapper;
 import ru.yandex.practicum.filmorate.dto.GenreDTO;
 import ru.yandex.practicum.filmorate.service.genre.GenreService;
 
-
 import java.util.List;
 
 @RestController
