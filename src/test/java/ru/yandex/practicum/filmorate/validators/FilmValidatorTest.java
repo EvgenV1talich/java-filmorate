@@ -52,7 +52,7 @@ public class FilmValidatorTest {
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
         MPA mpa = new MPA(0, "G");
-        Assertions.assertFalse(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
+        Assertions.assertTrue(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
 
     @Test
