@@ -2,9 +2,11 @@ package ru.yandex.practicum.filmorate.dal.mpadao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.MPA;
 
@@ -13,7 +15,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
-@Component
+@Repository
+@Primary
 @RequiredArgsConstructor
 public class MpaDbStorage implements MpaStorage {
     private final JdbcTemplate jdbcTemplate;
@@ -43,7 +46,7 @@ public class MpaDbStorage implements MpaStorage {
     public MPA mapToMpa(ResultSet rs, int rowNum) throws SQLException {
         return MPA.builder()
                 .id(rs.getInt("id"))
-                .name(rs.getString("rate"))
+                .rate(rs.getString("rate"))
                 .build();
     }
 }

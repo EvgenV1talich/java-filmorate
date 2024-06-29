@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.service.film.FilmServiceImpl;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class FilmController {
     @GetMapping
     public ResponseEntity<List<FilmDTO>> readAllFilmsList() {
         log.info("GET '/films' all films");
-        return new ResponseEntity<>(service.readAllFilmsList(), HttpStatus.OK);
+        return new ResponseEntity<>(service.readAllFilms(), HttpStatus.OK);
     }
 
     @PutMapping("{id}/like/{userId}")
-    public ResponseEntity<?> addLikeFromUser(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<?> addLikeFromUser(@PathVariable Integer id, @PathVariable Long userId) {
         service.userLike(id, userId);
         log.info(
                 "PUT  '/films/{}/like/{}' to add like to film (id {}) from user_id {}",
@@ -46,7 +47,7 @@ public class FilmController {
     }
 
     @DeleteMapping("{id}/like/{userId}")
-    public ResponseEntity<?> deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<?> deleteLike(@PathVariable Integer id, @PathVariable Long userId) {
         service.deleteLikeById(id, userId);
         log.info(
                 "DELETE '/films/{}/like/{}' to remove like from film_id {} from user_id{}",
@@ -55,17 +56,14 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<List<FilmDTO>> getTopFilms(
-            @RequestParam(required = false, defaultValue = "10") Long count,
-            @RequestParam(required = false) Long genreId,
-            @RequestParam(required = false) Long year) {
+    public ResponseEntity<List<FilmDTO>> getTopFilms(@RequestParam(required = false, defaultValue = "10") Long count) {
         log.info("GET '/films/popular' highest likes {} films",
                 count);
-        return new ResponseEntity<>(service.getTopLikedFilms(count), HttpStatus.OK);
+        return new ResponseEntity<>(service.getTopFilms(count), HttpStatus.OK);
     }
 
     @GetMapping("{filmId}")
-    public ResponseEntity<FilmDTO> getFilm(@PathVariable Long filmId) {
+    public ResponseEntity<FilmDTO> getFilm(@PathVariable Integer filmId) {
         log.info("GET '/films/{}'  film_id {}.", filmId, filmId);
         return new ResponseEntity<>(service.getFilm(filmId), HttpStatus.OK);
     }
@@ -78,7 +76,7 @@ public class FilmController {
 //    }
 
     @DeleteMapping("/{filmId}")
-    public ResponseEntity<?> deleteFilm(@PathVariable Long filmId) {
+    public ResponseEntity<?> deleteFilm(@PathVariable Integer filmId) {
         log.info("DELETE '/films/{}' to remove film", filmId);
         service.deleteFilm(filmId);
         return new ResponseEntity<>(HttpStatus.OK);

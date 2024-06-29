@@ -3,11 +3,13 @@ package ru.yandex.practicum.filmorate.dal.userdao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
@@ -20,7 +22,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-@Component("userDBStorage")
+@Repository("userDBStorage")
+@Primary
 @RequiredArgsConstructor
 public class UserDbStorage implements UserStorage {
 
@@ -29,9 +32,9 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User createUser(User user) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users")
-                .usingGeneratedKeyColumns("id");
+                .usingGeneratedKeyColumns("ID");
         Number key = simpleJdbcInsert.executeAndReturnKey(userToMap(user));
-        user.setId((Long) key);
+        user.setId(Long.parseLong(String.valueOf(key)));
         log.debug("Create user id={}.", user.getId());
         return user;
     }
@@ -54,7 +57,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> getUsers() {
         String sqlQuery = "SELECT * FROM users ";
-        log.debug("Get user list success");
+        log.info("Get user list success");
         return jdbcTemplate.query(sqlQuery, this::mapToUser);
     }
 
@@ -63,7 +66,7 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "SELECT * FROM users WHERE id = ?";
         try {
             User user = jdbcTemplate.queryForObject(sqlQuery, this::mapToUser, id);
-            log.debug("Get user id={}.", id);
+            log.info("Get user id={}.", id);
             return user;
         } catch (Throwable throwable) {
             throw new UserNotFoundException("User not found");
@@ -82,21 +85,21 @@ public class UserDbStorage implements UserStorage {
     }
 
     public User mapToUser(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
-                .id(rs.getLong("id"))
-                .email(rs.getString("email"))
-                .login(rs.getString("login"))
-                .name(rs.getString("name"))
-                .birthday(rs.getDate("birthday").toLocalDate())
-                .friends(findFriendsByUserId(rs.getLong("id")))
-                .build();
+        User user = new User();
+        user.setId(rs.getLong("id"));
+        user.setEmail(rs.getString("email"));
+        user.setLogin(rs.getString("login"));
+        user.setName(rs.getString("name"));
+        user.setBirthday(rs.getDate("birthday").toLocalDate());
+        user.setFriends(findFriendsByUserId(user.getId()));
+        return user;
     }
 
     @Override
     public void userAddFriend(Long userId, Long friendId) {
         User user = getUser(userId);
         User friend = getUser(friendId); // если юзер отсутствует - будет выброшено исключение
-        String query = "INSERT INTO users+friends (request_user_id, response_user_id) VALUES (?,?)";
+        String query = "INSERT INTO users_friends (request_user_id, response_user_id) VALUES (?,?)";
         try {
             jdbcTemplate.update(query, userId, friendId);
             log.debug("Add to friends between {} and {} success", friendId, userId);
@@ -109,6 +112,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void userDeleteFriend(Long userId, Long friendId) {
+        //TODO: доделать валидацию
         getUser(userId); // для валидации
         getUser(friendId); // для валидации
         String query = "DELETE FROM users_friends WHERE request_user_id = ? AND response_user_id = ?";

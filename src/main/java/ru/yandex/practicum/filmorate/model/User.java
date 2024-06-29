@@ -26,7 +26,6 @@ public class User {
     @Past
     private LocalDate birthday;
     private Set<Long> friends = new TreeSet<>();
-    private ArrayList<FriendRequest> requests;
 
     public User(Long id, String email, String login, String name, LocalDate birthday) {
         this.id = id;

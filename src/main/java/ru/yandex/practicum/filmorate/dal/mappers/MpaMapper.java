@@ -1,34 +1,40 @@
-package ru.yandex.practicum.filmorate.mapper;
+package ru.yandex.practicum.filmorate.dal.mappers;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.MpaDTO;
-import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.MPA;
 
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Component
 public class MpaMapper {
 
     private MpaMapper() {
     }
 
-    public static Mpa dtoToMpa(MpaDTO mpaDTO) {
-        return Mpa.builder()
+    public MPA dtoToMpa(MpaDTO mpaDTO) {
+        return MPA.builder()
                 .id(mpaDTO.getId())
-                .name(mpaDTO.getName())
+                .rate(mpaDTO.getRate())
                 .build();
     }
 
-    public static MpaDTO mpaToDto(Mpa mpa) {
+    public MpaDTO mpaToDto(MPA mpa) {
         return MpaDTO.builder()
                 .id(mpa.getId())
-                .name(mpa.getName())
+                .rate(mpa.getRate())
                 .build();
     }
 
-    public static List<MpaDTO> listMpaToListDto(Collection<Mpa> mpas) {
-        System.out.println(mpas);
-        return mpas.stream().map(MpaMapper::mpaToDto).collect(Collectors.toList());
+    public List<MpaDTO> listMpaToListDto(Collection<MPA> mpas) {
+        List<MpaDTO> mpaDTOS = new ArrayList<>();
+        for (MPA mpa : mpas) {
+            mpaDTOS.add(mpaToDto(mpa));
+        }
+        return mpaDTOS;
     }
 
 }

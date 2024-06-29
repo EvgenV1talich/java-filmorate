@@ -1,54 +1,65 @@
-package ru.yandex.practicum.filmorate.mapper;
+package ru.yandex.practicum.filmorate.dal.mappers;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.MpaDTO;
+import ru.yandex.practicum.filmorate.dto.UserDTO;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class FilmMapper {
 
     private FilmMapper() {
     }
 
-    public static FilmDTO filmToDTO(Film film) {
+    public FilmDTO filmToDTO(Film film) {
         if (film == null) {
             throw new IllegalArgumentException("film cannot be null");
         }
-
         return FilmDTO.builder()
                 .id(film.getId())
                 .name(film.getName())
                 .description(film.getDescription())
                 .releaseDate(film.getReleaseDate())
                 .duration(film.getDuration())
-                .likes(film.getLikes())
-                .genres(film.getGenres())
-                .directors(film.getDirectors())
+                .likes(film.getLikesFromUsers())
+                .genres(film.getGenre())
                 .mpa(film.getMpa())
                 .build();
     }
 
-    public static Film dtoToFilm(FilmDTO filmDTO) {
+    public Film dtoToFilm(FilmDTO filmDTO) {
         if (filmDTO == null) {
             throw new IllegalArgumentException("filmDTO cannot be null");
         }
         //TODO remove builder
-        return Film.builder()
-                .id(filmDTO.getId())
-                .name(filmDTO.getName())
-                .description(filmDTO.getDescription())
-                .releaseDate(filmDTO.getReleaseDate())
-                .duration(filmDTO.getDuration())
-                .likes(filmDTO.getLikes())
-                .genres(filmDTO.getGenres())
-                .directors(filmDTO.getDirectors())
-                .mpa(filmDTO.getMpa())
-                .build();
+        Film film = new Film();
+        film.setId(filmDTO.getId());
+        film.setName(filmDTO.getName());
+        film.setDescription(filmDTO.getDescription());
+        film.setReleaseDate(filmDTO.getReleaseDate());
+        film.setDuration(filmDTO.getDuration());
+        film.setLikesFromUsers(filmDTO.getLikes());
+        film.setGenre(filmDTO.getGenres());
+        film.setMpa(filmDTO.getMpa());
+        return film;
     }
 
-    public static List<FilmDTO> listFilmsToListDto(Collection<Film> films) {
-        return films.stream().map(FilmMapper::filmToDTO).collect(Collectors.toList());
+    public List<FilmDTO> listFilmsToListDto(Collection<Film> films) {
+        List<FilmDTO> filmDTOS = new ArrayList<>();
+        for (Film film : films) {
+            filmDTOS.add(filmToDTO(film));
+        }
+        return filmDTOS;
     }
+
 }

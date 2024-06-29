@@ -2,9 +2,13 @@ package ru.yandex.practicum.filmorate.dal.likesdao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dal.likesdao.LikesDAO;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -12,7 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-@Component
+@Repository
+@Primary
 @RequiredArgsConstructor
 public class LikesDbStorage implements LikesDAO {
 
@@ -27,7 +32,7 @@ public class LikesDbStorage implements LikesDAO {
     }
 
     @Override
-    public void addLike(Long filmId, Long userId) {
+    public void addLike(Integer filmId, Long userId) {
         String query = "DELETE FROM films_users WHERE film_id = ? AND user_id = ?";
         jdbcTemplate.update(query, filmId, userId);
         query = "INSERT INTO films_users (film_id, user_id) VALUES(?, ?) ";

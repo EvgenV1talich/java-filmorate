@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -53,7 +53,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void updateFilm(Film film) {
+    public Film updateFilm(Film film) {
         try {
             StringBuilder builder = new StringBuilder();
             log.info(builder
@@ -66,6 +66,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.error("Ошибка обновления фильма");
             throw new FilmNotFoundException("Ошибка обновления фильма");
         }
+        return film;
     }
 
     @Override
@@ -97,8 +98,13 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.containsKey(filmId);
     }
 
-    public HashMap<Integer, Film> getFilms() {
-        return films;
+    public List<Film> getFilms() {
+        return null;
+    }
+
+    @Override
+    public List<Film> getTopFilms(Long count) {
+        return null;
     }
 
     private Integer generateId() {

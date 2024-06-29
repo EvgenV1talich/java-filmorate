@@ -1,18 +1,22 @@
-package ru.yandex.practicum.filmorate.mapper;
+package ru.yandex.practicum.filmorate.dal.mappers;
 
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dto.MpaDTO;
 import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Component
 public class UserMapper {
 
     private UserMapper() {
     }
 
-    public static UserDTO userToDTO(User user) {
+    public UserDTO userToDTO(User user) {
         if (user == null) {
             throw new IllegalArgumentException("user cannot be null");
         }
@@ -26,22 +30,25 @@ public class UserMapper {
                 .build();
     }
 
-    public static User dtoToUser(UserDTO userDTO) {
+    public User dtoToUser(UserDTO userDTO) {
         if (userDTO == null) {
             throw new IllegalArgumentException("userDTO cannot be null");
         }
-
-        return User.builder()
-                .id(userDTO.getId())
-                .email(userDTO.getEmail())
-                .login(userDTO.getLogin())
-                .name(userDTO.getName())
-                .birthday(userDTO.getBirthday())
-                .build();
+        User user = new User();
+        user.setId(userDTO.getId());
+        user.setEmail(userDTO.getEmail());
+        user.setLogin(userDTO.getLogin());
+        user.setName(userDTO.getName());
+        user.setBirthday(userDTO.getBirthday());
+        return user;
     }
 
-    public static List<UserDTO> listUsersToListDto(Collection<User> users) {
-        return users.stream().map(UserMapper::userToDTO).collect(Collectors.toList());
+    public List<UserDTO> listUsersToListDto(Collection<User> users) {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            userDTOS.add(userToDTO(user));
+        }
+        return userDTOS;
     }
 
 }

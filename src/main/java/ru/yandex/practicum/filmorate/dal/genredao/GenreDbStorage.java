@@ -2,17 +2,21 @@ package ru.yandex.practicum.filmorate.dal.genredao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Component
+@Repository
+@Primary
 @RequiredArgsConstructor
 public class GenreDbStorage implements GenreDAO {
 
@@ -48,12 +52,12 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getGenresByFilm(Integer filmId) {
+    public ArrayList<Genre> getGenresByFilm(Integer filmId) {
         String sqlQuery
                 = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
         List<Genre> genres = jdbcTemplate.query(sqlQuery,
-                (rs, rowNum) -> new Genre(rs.getInt("genreid"), rs.getString("name")), filmId);
+                (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), filmId);
         log.debug("Get genres list for film (id {})", filmId);
-        return genres;
+        return (ArrayList<Genre>) genres;
     }
 }

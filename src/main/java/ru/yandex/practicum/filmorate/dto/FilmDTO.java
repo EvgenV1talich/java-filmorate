@@ -3,10 +3,13 @@ package ru.yandex.practicum.filmorate.dto;
 import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Data
@@ -26,6 +29,6 @@ public class FilmDTO {
     @PositiveOrZero
     private Integer duration;
     private Set<Long> likes;
-    private Set<Genre> genres;
+    private ArrayList<Genre> genres;
     private MPA mpa;
 }
