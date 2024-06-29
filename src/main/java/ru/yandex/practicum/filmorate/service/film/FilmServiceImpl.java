@@ -93,10 +93,6 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<FilmDTO> getTopFilms(Long count) {
         log.debug("Get top {} films by likes", count);
-//        Integer currentCount = filmStorage.getFilmsCount();
-//        if (count > currentCount) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//        }
         return mapper.listFilmsToListDto(filmStorage.getTopFilms(count));
     }
 
