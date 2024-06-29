@@ -64,7 +64,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void deleteLikeById(Integer idFilm, Long idUser) {
         filmStorage.getFilm(idFilm);
-        userService.getUserById(idUser); // для валидации
+        userService.getUserById(idUser);
         likeService.deleteLike(idFilm, idUser);
         log.debug("User {} deleted like from film {}", idUser, idFilm);
     }

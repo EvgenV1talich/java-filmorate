@@ -18,7 +18,9 @@ import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,15 +47,13 @@ public class FilmDbStorage implements FilmStorage {
         film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
         log.info("MPA = " + film.getMpa().toString());
         if (film.getGenre() != null && !film.getGenre().isEmpty()) {
-            if(genreExist()) {
+            if(genreExists(film.getGenre(), genreStorage.getAll())) {
                 String query = "INSERT INTO films_genres (film_id,genre_id) VALUES (?,?)";
                 for (Genre genre : film.getGenre()) {
                     jdbcTemplate.update(query, film.getId(), genre.getId());
                 }
             }
         }
-
-        genreStorage.getGenresByFilm(1)
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         log.debug("Film (id={}) saved.", film.getId());
         return film;
@@ -90,6 +90,17 @@ public class FilmDbStorage implements FilmStorage {
         }
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         return film;
+    }
+    private boolean genreExists(ArrayList<Genre> filmGenres, List<Genre> dbGenres) {
+        List<Integer> genresInDbIds = new ArrayList<>();
+        List<Integer> filmGenresIds = new ArrayList<>();
+        for (Genre genre : dbGenres) {
+            genresInDbIds.add(genre.getId());
+        }
+        for (Genre genre : filmGenres) {
+            filmGenresIds.add(genre.getId());
+        }
+        return new HashSet<>(genresInDbIds).containsAll(filmGenresIds);
     }
 
     @Override
