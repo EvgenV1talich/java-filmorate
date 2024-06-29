@@ -54,6 +54,9 @@ public class FilmDbStorage implements FilmStorage {
         log.debug("Film (id={}) saved.", film.getId());
         return film;
     }
+    public Integer getFilmsCount() {
+        return getFilms().size();
+    }
 
     @Override
     public Film updateFilm(Film film) {
@@ -146,7 +149,17 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     public List<Film> getTopFilms(Long count) {
-        return  null;
+        String query =
+                "SELECT f1.* FROM" +
+                        "  (select f.id, count(f.id) AS cnt from" +
+                        "  films_users fu" +
+                        "  join films f on f.id = fu.film_id" +
+                        "  GROUP by f.id ORDER BY 2 DESC) fff" +
+                        "  JOIN films f1 ON f1.id = fff.id" +
+                        "  LIMIT  ?";
+        List<Film> topFilms = jdbcTemplate.query(query, this::mapToFilm, count);
+        log.info("Get top {} films", count);
+        return topFilms;
     }
 
     public Map<String, Object> filmToMap(Film film) {
@@ -157,7 +170,6 @@ public class FilmDbStorage implements FilmStorage {
         temp.put("duration", film.getDuration());
         //TODO MAYBE BUG
         temp.put("mpa_id", film.getMpa().getId());
-
         return temp;
     }
 }

@@ -107,6 +107,11 @@ public class InMemoryFilmStorage implements FilmStorage {
         return null;
     }
 
+    @Override
+    public Integer getFilmsCount() {
+        return null;
+    }
+
     private Integer generateId() {
         return lastGeneratedId++;
     }
