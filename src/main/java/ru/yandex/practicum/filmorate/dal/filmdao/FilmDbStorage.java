@@ -91,7 +91,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
         return film;
     }
-    private boolean genreExists(ArrayList<Genre> filmGenres, List<Genre> dbGenres) {
+    private boolean genreExists(List<Genre> filmGenres, List<Genre> dbGenres) {
         List<Integer> genresInDbIds = new ArrayList<>();
         List<Integer> filmGenresIds = new ArrayList<>();
         for (Genre genre : dbGenres) {
