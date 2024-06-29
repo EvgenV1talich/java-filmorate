@@ -2,9 +2,7 @@ package ru.yandex.practicum.filmorate.service.film;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmStorage;
 import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
@@ -12,14 +10,10 @@ import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.dto.FilmDTO;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.service.likes.LikesService;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -36,19 +30,14 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDTO createFilm(FilmDTO filmDTO) {
- /*       Film film = mapper.dtoToFilm(filmDTO);
-        if (FilmValidator.validate(film)) {
-            log.debug("Film {} saved.", filmDTO.getId());
-            return mapper.filmToDTO(filmStorage.createFilm(film));
-        }
-        throw new FilmValidationException("Invalid film" + filmDTO);*/
         if (FilmValidator.validate(mapper.dtoToFilm(filmDTO))
                 && FilmValidator.filmMpaValidation(filmDTO.getMpa(), mpaStorage.readAll())) {
-        Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
+            Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
 
             log.debug("Film {} saved.", filmDTO.getId());
             return mapper.filmToDTO(film);
-        } throw  new FilmValidationException("Invalid film!");
+        }
+        throw new FilmValidationException("Invalid film!");
     }
 
     @Override
@@ -99,7 +88,6 @@ public class FilmServiceImpl implements FilmService {
     public void deleteFilm(Integer id) {
         filmStorage.deleteFilm(id);
     }
-
 
 
 }
