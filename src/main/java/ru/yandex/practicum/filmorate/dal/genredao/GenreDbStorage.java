@@ -5,14 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Repository
@@ -38,10 +39,14 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getAll() {
+    public Set<Genre> getAll() {
         String sqlQuery = "SELECT * FROM genres ORDER BY id";
         log.debug("Все Genres получены.");
-        return jdbcTemplate.query(sqlQuery, this::mapToGenre);
+
+        var v =  jdbcTemplate.query(sqlQuery, this::mapToGenre);
+
+        return new HashSet<>(v);
+
     }
 
     public Genre mapToGenre(ResultSet rs, int rowNum) throws SQLException {
@@ -52,12 +57,13 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public ArrayList<Genre> getGenresByFilm(Integer filmId) {
+    public Set<Genre> getGenresByFilm(Integer filmId) {
         String sqlQuery
                 = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
-        List<Genre> genres = jdbcTemplate.query(sqlQuery,
+        var genres = jdbcTemplate.query(sqlQuery,
                 (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), filmId);
         log.debug("Get genres list for film (id {})", filmId);
-        return (ArrayList<Genre>) genres;
+
+        return new HashSet<>(genres);
     }
 }

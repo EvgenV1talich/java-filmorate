@@ -23,7 +23,7 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    private ArrayList<Genre> genre;
+    private Set<Genre> genre;
     private Set<Long> likesFromUsers;
     private MPA mpa;
 
@@ -32,7 +32,7 @@ public class Film {
                 String description,
                 LocalDate releaseDate,
                 Integer duration,
-                ArrayList<Genre> genre) {
+                Set<Genre> genre) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -46,7 +46,7 @@ public class Film {
         this.mpa = mpa;
     }
 
-    public void setGenre(ArrayList<Genre> genre) {
+    public void setGenre(Set<Genre> genre) {
         this.genre = genre;
     }
 
