@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -60,9 +61,23 @@ public class FilmDbStorage implements FilmStorage {
             }
         }
         film.setGenre(genreStorage.getGenresByFilm(film.getId()));
+        removeDoubleeGenre(film);
         log.debug("Film (id={}) saved.", film.getId());
         return film;
     }
+
+    private void removeDoubleeGenre(Film film) {
+        var v = film.getGenre();
+        var existingName = v.stream().map(s -> s.getName()).collect(Collectors.toSet());
+
+
+
+
+
+
+
+    }
+
     public Integer getFilmsCount() {
         return getFilms().size();
     }
