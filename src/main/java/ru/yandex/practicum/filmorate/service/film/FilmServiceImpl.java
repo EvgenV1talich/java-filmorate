@@ -25,7 +25,6 @@ public class FilmServiceImpl implements FilmService {
     private final UserService userService;
     private final LikesService likeService;
     private final MpaDbStorage mpaStorage;
-    private final GenreDbStorage genreDbStorage;
     private final FilmMapper mapper;
 
     @Override
