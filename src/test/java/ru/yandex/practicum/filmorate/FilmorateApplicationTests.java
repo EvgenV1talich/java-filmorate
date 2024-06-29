@@ -19,6 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmorateApplicationTests {
     public final UserDbStorage userStorage;
+
     @Test
     public void testFindUserById() {
 
