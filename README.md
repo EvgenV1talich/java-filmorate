@@ -1,3 +1,3 @@
 # java-filmorate
 
-![Схема БД](https://ibb.co/sR6SCdy)
+![Схема БД](https://github.com/EvgenV1talich/java-filmorate/main/src/main/resources/schemePhoto.png)
