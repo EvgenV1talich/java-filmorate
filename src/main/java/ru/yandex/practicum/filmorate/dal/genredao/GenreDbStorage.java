@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Repository
@@ -39,13 +38,13 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public Set<Genre> getAll() {
+    public List<Genre> getAll() {
         String sqlQuery = "SELECT * FROM genres ORDER BY id";
         log.debug("Все Genres получены.");
 
         var v =  jdbcTemplate.query(sqlQuery, this::mapToGenre);
 
-        return new HashSet<>(v);
+        return new ArrayList<>(v);
 
     }
 
@@ -57,13 +56,13 @@ public class GenreDbStorage implements GenreDAO {
     }
 
     @Override
-    public Set<Genre> getGenresByFilm(Integer filmId) {
+    public ArrayList<Genre> getGenresByFilm(Integer filmId) {
         String sqlQuery
                 = "SELECT genre_id, name FROM films_genres INNER JOIN genres ON genre_id = id WHERE film_id = ? ORDER BY genre_id ASC ";
         var genres = jdbcTemplate.query(sqlQuery,
                 (rs, rowNum) -> new Genre(rs.getInt("genre_id"), rs.getString("name")), filmId);
         log.debug("Get genres list for film (id {})", filmId);
 
-        return new HashSet<>(genres);
+        return new ArrayList<>(genres);
     }
 }

@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.dal.genredao;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface GenreDAO {
 
     Genre getById(Integer id);
-    Set<Genre> getAll();
-    Set<Genre> getGenresByFilm(Integer filmId);
+    List<Genre> getAll();
+    ArrayList<Genre> getGenresByFilm(Integer filmId);
 
 }
