@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -10,11 +8,11 @@ import lombok.Setter;
 public class MPA {
 
     private Integer id;
-    private String rate;
+    private String name;
 
-    public MPA(Integer id, String rate, Integer films_id) {
+    public MPA(Integer id, String name, Integer films_id) {
         this.id = id;
-        this.rate = rate;
+        this.name = name;
     }
 
     public MPA() {
@@ -25,7 +23,7 @@ public class MPA {
     public String toString() {
         return "MPA{" +
                 "id=" + id +
-                ", rate='" + rate + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

@@ -18,14 +18,14 @@ public class MpaMapper {
     public MPA dtoToMpa(MpaDTO mpaDTO) {
         MPA mpa = new MPA();
         mpa.setId(mpaDTO.getId());
-        mpa.setRate(mpaDTO.getRate());
+        mpa.setName(mpaDTO.getRate());
         return mpa;
     }
 
     public MpaDTO mpaToDto(MPA mpa) {
         return MpaDTO.builder()
                 .id(mpa.getId())
-                .rate(mpa.getRate())
+                .rate(mpa.getName())
                 .build();
     }
 

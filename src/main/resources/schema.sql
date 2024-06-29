@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS users_friends cascade;
 CREATE TABLE IF NOT EXISTS PUBLIC.MPA
 (
     ID   INTEGER NOT NULL AUTO_INCREMENT,
-    RATE VARCHAR,
+    NAME VARCHAR,
     CONSTRAINT MPA_PK PRIMARY KEY (ID)
 );
 
@@ -72,15 +72,15 @@ CREATE TABLE IF NOT EXISTS PUBLIC.USERS_FRIENDS
 );
 
 
-INSERT INTO mpa (id, rate)
+INSERT INTO mpa (id, name)
 VALUES (1, 'G');
-INSERT INTO mpa (id, rate)
+INSERT INTO mpa (id, name)
 VALUES (2, 'PG');
-INSERT INTO mpa (id, rate)
+INSERT INTO mpa (id, name)
 VALUES (3, 'PG-13');
-INSERT INTO mpa (id, rate)
+INSERT INTO mpa (id, name)
 VALUES (4, 'R');
-INSERT INTO mpa (id, rate)
+INSERT INTO mpa (id, name)
 VALUES (5, 'NC-17');
 
 ALTER TABLE IF EXISTS MPA
