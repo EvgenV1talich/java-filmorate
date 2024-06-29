@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmorateApplicationTests {
-    private final UserDbStorage userStorage;
+    public final UserDbStorage userStorage;
     @Test
     public void testFindUserById() {
 

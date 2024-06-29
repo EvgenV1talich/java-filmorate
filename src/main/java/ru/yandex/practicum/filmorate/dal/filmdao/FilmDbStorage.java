@@ -14,6 +14,8 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPA;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -122,7 +124,13 @@ public class FilmDbStorage implements FilmStorage {
         film.setDuration(sqlRowSet.getInt("duration"));
         film.setGenre(genreStorage.getGenresByFilm(sqlRowSet.getInt("id")));
         film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
-        film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("id")));
+        try {
+            MPA mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
+            film.setMpa(mpa);
+        } catch(Exception e){
+
+        }
+
         log.debug("Get film {}.", film.getId());
         return film;
     }
