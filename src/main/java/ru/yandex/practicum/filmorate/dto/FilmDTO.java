@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Data
 @Builder
+@EqualsAndHashCode
 public class FilmDTO {
 
     private Integer id;

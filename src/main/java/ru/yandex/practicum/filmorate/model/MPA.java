@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class MPA {
 
     private Integer id;
