@@ -43,8 +43,7 @@ public class FilmServiceImpl implements FilmService {
         }
         throw new FilmValidationException("Invalid film" + filmDTO);*/
         if (FilmValidator.validate(mapper.dtoToFilm(filmDTO))
-                && FilmValidator.filmMpaValidation(filmDTO.getMpa(), mpaStorage.readAll())
-                && FilmValidator.filmGenreValidation(filmDTO.getGenres(), (ArrayList<Genre>) genreDbStorage.getAll())) {
+                && FilmValidator.filmMpaValidation(filmDTO.getMpa(), mpaStorage.readAll())) {
         Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
 
             log.debug("Film {} saved.", filmDTO.getId());
