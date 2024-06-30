@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.dal.mappers;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dto.GenreDTO;
+import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.ArrayList;
@@ -14,22 +14,22 @@ public class GenreMapper {
     private GenreMapper() {
     }
 
-    public Genre dtoToGenre(GenreDTO genreDTO) {
+    public Genre dtoToGenre(GenreDto genreDTO) {
         return Genre.builder()
                 .id(genreDTO.getId())
                 .name(genreDTO.getName())
                 .build();
     }
 
-    public GenreDTO genreToDto(Genre genre) {
-        return GenreDTO.builder()
+    public GenreDto genreToDto(Genre genre) {
+        return GenreDto.builder()
                 .id(genre.getId())
                 .name(genre.getName())
                 .build();
     }
 
-    public List<GenreDTO> listGenreToListDto(Collection<Genre> genres) {
-        List<GenreDTO> genreDTOS = new ArrayList<>();
+    public List<GenreDto> listGenreToListDto(Collection<Genre> genres) {
+        List<GenreDto> genreDTOS = new ArrayList<>();
         for (Genre genre : genres) {
             genreDTOS.add(genreToDto(genre));
         }

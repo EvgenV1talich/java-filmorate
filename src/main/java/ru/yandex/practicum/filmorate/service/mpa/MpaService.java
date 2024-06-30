@@ -1,15 +1,15 @@
 package ru.yandex.practicum.filmorate.service.mpa;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 
 @Component
 public interface MpaService {
 
-    List<MPA> readAll();
+    List<Mpa> readAll();
 
-    MPA readById(Integer id);
+    Mpa readById(Integer id);
 
 }

@@ -5,10 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dal.mappers.UserMapper;
 import ru.yandex.practicum.filmorate.dal.userdao.UserStorage;
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.exceptions.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validators.UserValidator;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) {
+    public UserDto saveUser(UserDto userDTO) {
         User user = mapper.dtoToUser(userDTO);
         if (UserValidator.validate(user)) {
             log.debug("User {} saved", userDTO.getId());
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userDto) {
+    public UserDto updateUser(UserDto userDto) {
         User user = mapper.dtoToUser(userDto);
         if (UserValidator.validate(user)) {
             log.debug("User {} updated", userDto.getId());
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> readAllUsers() {
+    public List<UserDto> readAllUsers() {
         log.debug("Get users list");
         return mapper.listUsersToListDto(userStorage.getUsers());
     }
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         log.debug("User c ID c {} получен.", id);
         return mapper.userToDTO(userStorage.getUser(id));
     }
@@ -70,10 +69,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> readAllFriendsByUserId(Long idUser) {
+    public List<UserDto> readAllFriendsByUserId(Long idUser) {
         User user = userStorage.getUser(idUser);
         Set<Long> ids = user.getFriends();
-        List<UserDTO> friends = new ArrayList<>();
+        List<UserDto> friends = new ArrayList<>();
         for (Long id : ids) {
             friends.add(mapper.userToDTO(userStorage.getUser(id)));
         }
@@ -88,9 +87,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getSameFriendsList(Long user1Id, Long user2Id) {
+    public List<UserDto> getSameFriendsList(Long user1Id, Long user2Id) {
         Set<Long> ids = new HashSet<>(userStorage.getUser(user1Id).getFriends());
-        List<UserDTO> users = new ArrayList<>();
+        List<UserDto> users = new ArrayList<>();
         ids.retainAll(userStorage.getUser(user2Id).getFriends());
         log.debug("Get same friends list user {} and user {}.", user1Id, user2Id);
         for (Long id : ids) {

@@ -15,7 +15,7 @@ import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.dal.userdao.UserDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -53,7 +53,7 @@ class FilmorateApplicationTests {
     @DisplayName("Тест получения имени Mpa по ID")
     @Test
     public void findMpaByIdTest() {
-        MPA mpa = new MPA(4, "R");
+        Mpa mpa = new Mpa(4, "R");
         Assertions.assertEquals(mpa, mpaDBStorage.readById(4), "Ожидался корректный Mpa");
     }
 
@@ -63,7 +63,7 @@ class FilmorateApplicationTests {
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Комедия"));
         Film film = new Film(1, "Film1Name", "descr", LocalDate.of(1990, 5, 5), 100, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
         Assertions.assertEquals(film.getMpa(), mpaDBStorage.readById(4), "Ожидались коррктные Mpa");
     }
@@ -134,7 +134,7 @@ class FilmorateApplicationTests {
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Комедия"));
         Film film = new Film(1, "name", "descr", LocalDate.of(2002, 1, 1), 87, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
         Assertions.assertEquals(film, filmDBStorage.getFilm(1), "Ожидался коррктный Film");
     }
@@ -145,7 +145,7 @@ class FilmorateApplicationTests {
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Комедия"));
         Film film = new Film(1, "name", "descr", LocalDate.of(2002, 1, 1), 87, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
         film.setName("other_name");
         filmDBStorage.updateFilm(film);
@@ -158,10 +158,10 @@ class FilmorateApplicationTests {
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Комедия"));
         Film film = new Film(1, "name", "descr", LocalDate.of(2002, 1, 1), 87, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
         Film film2 = new Film(1, "name", "descr", LocalDate.of(2002, 1, 1), 87, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
         Assertions.assertEquals(2, filmDBStorage.getFilmsCount());
         filmDBStorage.deleteFilm(film.getId());
@@ -174,7 +174,7 @@ class FilmorateApplicationTests {
         ArrayList<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1, "Комедия"));
         Film film = new Film(1, "name", "descr", LocalDate.of(2002, 1, 1), 87, genres);
-        film.setMpa(new MPA(4, "R"));
+        film.setMpa(new Mpa(4, "R"));
         filmDBStorage.createFilm(film);
 
         User user = new User(1L, "htaehaethaeht@mail.ru", "haethaeh", "haeeah", LocalDate.of(1999, 1, 1));

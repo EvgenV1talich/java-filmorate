@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.dal.mappers;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ public class FilmMapper {
     private FilmMapper() {
     }
 
-    public FilmDTO filmToDTO(Film film) {
+    public FilmDto filmToDTO(Film film) {
         if (film == null) {
             throw new IllegalArgumentException("film cannot be null");
         }
-        return FilmDTO.builder()
+        return FilmDto.builder()
                 .id(film.getId())
                 .name(film.getName())
                 .description(film.getDescription())
@@ -30,7 +30,7 @@ public class FilmMapper {
                 .build();
     }
 
-    public Film dtoToFilm(FilmDTO filmDTO) {
+    public Film dtoToFilm(FilmDto filmDTO) {
         if (filmDTO == null) {
             throw new IllegalArgumentException("filmDTO cannot be null");
         }
@@ -46,8 +46,8 @@ public class FilmMapper {
         return film;
     }
 
-    public List<FilmDTO> listFilmsToListDto(Collection<Film> films) {
-        List<FilmDTO> filmDTOS = new ArrayList<>();
+    public List<FilmDto> listFilmsToListDto(Collection<Film> films) {
+        List<FilmDto> filmDTOS = new ArrayList<>();
         for (Film film : films) {
             filmDTOS.add(filmToDTO(film));
         }

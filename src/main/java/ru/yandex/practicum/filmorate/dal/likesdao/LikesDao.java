@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.dal.likesdao;
 
 import java.util.Set;
 
-public interface LikesDAO {
+public interface LikesDao {
 
     void deleteLike(Integer filmId, Long userId);
 

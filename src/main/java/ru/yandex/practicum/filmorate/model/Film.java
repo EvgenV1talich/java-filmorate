@@ -24,7 +24,7 @@ public class Film {
     private Integer duration;
     private ArrayList<Genre> genre;
     private Set<Long> likesFromUsers;
-    private MPA mpa;
+    private Mpa mpa;
 
     public Film(Integer id,
                 String name,
@@ -41,7 +41,7 @@ public class Film {
         this.likesFromUsers = new TreeSet<Long>();
     }
 
-    public void setMpa(MPA mpa) {
+    public void setMpa(Mpa mpa) {
         this.mpa = mpa;
     }
 

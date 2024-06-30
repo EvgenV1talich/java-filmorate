@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dal.filmdao.FilmStorage;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.service.likes.LikesService;
 import ru.yandex.practicum.filmorate.validators.FilmValidator;
 
@@ -27,7 +27,7 @@ public class FilmServiceImpl implements FilmService {
     private final FilmMapper mapper;
 
     @Override
-    public FilmDTO createFilm(FilmDTO filmDTO) {
+    public FilmDto createFilm(FilmDto filmDTO) {
         if (FilmValidator.validate(mapper.dtoToFilm(filmDTO))
                 && FilmValidator.filmMpaValidation(filmDTO.getMpa(), mpaStorage.readAll())) {
             Film film = filmStorage.createFilm(mapper.dtoToFilm(filmDTO));
@@ -39,7 +39,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public FilmDTO updateFilm(FilmDTO filmDTO) {
+    public FilmDto updateFilm(FilmDto filmDTO) {
         Film film = mapper.dtoToFilm(filmDTO);
         if (FilmValidator.validate(film)) {
             log.debug("Film {} updated.", filmDTO.getId());
@@ -49,13 +49,13 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<FilmDTO> readAllFilms() {
+    public List<FilmDto> readAllFilms() {
         log.debug("Get films list");
         return mapper.listFilmsToListDto(filmStorage.getFilms());
     }
 
     @Override
-    public FilmDTO getFilm(Integer id) {
+    public FilmDto getFilm(Integer id) {
         log.debug("Get film {}.", id);
         return mapper.filmToDTO(filmStorage.getFilm(id));
     }
@@ -77,7 +77,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<FilmDTO> getTopFilms(Long count) {
+    public List<FilmDto> getTopFilms(Long count) {
         log.debug("Get top {} films by likes", count);
         return mapper.listFilmsToListDto(filmStorage.getTopFilms(count));
     }

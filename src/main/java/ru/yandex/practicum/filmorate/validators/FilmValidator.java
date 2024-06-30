@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
 import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,9 +42,9 @@ public class FilmValidator {
         return !date.isBefore(minDate);
     }
 
-    public static boolean filmMpaValidation(MPA mpa, List<MPA> mpas) {
+    public static boolean filmMpaValidation(Mpa mpa, List<Mpa> mpas) {
         ArrayList<Integer> mpaIds = new ArrayList<>();
-        for (MPA mpaTemp : mpas) {
+        for (Mpa mpaTemp : mpas) {
             mpaIds.add(mpaTemp.getId());
         }
         return mpaIds.contains(mpa.getId());

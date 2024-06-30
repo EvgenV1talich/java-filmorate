@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class MpaDbStorage implements MpaStorage {
 
 
     @Override
-    public MPA readById(Integer id) {
+    public Mpa readById(Integer id) {
         String sqlQuery = "SELECT * FROM mpa WHERE id = ?";
         if (id == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "MPA id = null!");
@@ -36,14 +36,14 @@ public class MpaDbStorage implements MpaStorage {
     }
 
     @Override
-    public List<MPA> readAll() {
+    public List<Mpa> readAll() {
         String sqlQuery = "SELECT * FROM mpa ORDER BY id";
         log.debug("Get MPA list");
         return jdbcTemplate.query(sqlQuery, this::mapToMpa);
     }
 
-    public MPA mapToMpa(ResultSet rs, int rowNum) throws SQLException {
-        MPA mpa = new MPA();
+    public Mpa mapToMpa(ResultSet rs, int rowNum) throws SQLException {
+        Mpa mpa = new Mpa();
         mpa.setId(rs.getInt("id"));
         mpa.setName(rs.getString("name"));
         return mpa;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.dal.mappers.MpaMapper;
-import ru.yandex.practicum.filmorate.dto.MpaDTO;
+import ru.yandex.practicum.filmorate.dto.MpaDto;
 import ru.yandex.practicum.filmorate.service.mpa.MpaService;
 
 import java.util.List;
@@ -24,13 +24,13 @@ public class MpaController {
     private final MpaMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<MpaDTO>> readAll() {
+    public ResponseEntity<List<MpaDto>> readAll() {
         log.info("GET '/mpa' all mpa");
         return new ResponseEntity<>(mapper.listMpaToListDto(mpaService.readAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MpaDTO> readById(@PathVariable Integer id) {
+    public ResponseEntity<MpaDto> readById(@PathVariable Integer id) {
         log.info("GET'/mpa/{}' mpa by id", id);
         return new ResponseEntity<>(mapper.mpaToDto(mpaService.readById(id)), HttpStatus.OK);
     }

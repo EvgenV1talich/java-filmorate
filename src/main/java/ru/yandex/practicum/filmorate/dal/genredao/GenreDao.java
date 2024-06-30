@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface GenreDAO {
+public interface GenreDao {
 
     Genre getById(Integer id);
 

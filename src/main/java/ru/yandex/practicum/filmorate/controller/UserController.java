@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.service.user.UserServiceImpl;
 
 import javax.validation.Valid;
@@ -27,20 +27,20 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO newUser) {
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto newUser) {
         log.info("POST to '/users' for create user");
         return new ResponseEntity<>(userService.saveUser(newUser), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO newUser) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto newUser) {
         log.info("PUT to '/users' to update user");
         return new ResponseEntity<>(userService.updateUser(newUser), HttpStatus.OK);
 
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> readAllUsers() {
+    public ResponseEntity<List<UserDto>> readAllUsers() {
         log.info("GET to '/users' to get all users");
         return new ResponseEntity<>(userService.readAllUsers(), HttpStatus.OK);
     }
@@ -65,14 +65,14 @@ public class UserController {
     }
 
     @GetMapping("{id}/friends")
-    public ResponseEntity<List<UserDTO>> readAllUserFriends(@PathVariable Long id) {
+    public ResponseEntity<List<UserDto>> readAllUserFriends(@PathVariable Long id) {
         log.info("GET to '/users/{id}/friends' to get all friends id for user {}.",
                 id);
         return new ResponseEntity<>(userService.readAllFriendsByUserId(id), HttpStatus.OK);
     }
 
     @GetMapping("{id}/friends/common/{otherId}")
-    public ResponseEntity<List<UserDTO>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+    public ResponseEntity<List<UserDto>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         log.info(
                 "GET to '/users/{}/friends/common/{}' to get all same friends ids between users {} and {}.",
                 id, otherId, id, otherId);
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
         log.info("GET to '/users/{userId}' to get user ID={}", userId);
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }

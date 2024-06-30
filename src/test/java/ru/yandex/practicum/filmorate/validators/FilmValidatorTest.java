@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
-        MPA mpa = new MPA(0, "G");
+        Mpa mpa = new Mpa(0, "G");
 
         Assertions.assertFalse(FilmValidator.filmTitleValidation(film.getName()));
     }
@@ -27,8 +27,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
-        ;
-        MPA mpa = new MPA(0, "G");
+        Mpa mpa = new Mpa(0, "G");
         film.setDescription("looooooooooooo" +
                 "ooooooooooooooooooooooooooooooooo" +
                 "ooooooooooooooooooooooooooooooooooo" +
@@ -51,7 +50,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), 111, v);
-        MPA mpa = new MPA(0, "G");
+        Mpa mpa = new Mpa(0, "G");
         Assertions.assertTrue(FilmValidator.filmReleaseDateValidation(film.getReleaseDate()));
     }
 
@@ -61,7 +60,7 @@ public class FilmValidatorTest {
         var v = new ArrayList<Genre>();
         v.add(genre);
         Film film = new Film(0, "", "testDescription", LocalDate.of(2000, 1, 1), -1, v);
-        MPA mpa = new MPA(0, "G");
+        Mpa mpa = new Mpa(0, "G");
         Assertions.assertFalse(FilmValidator.filmDurationValidation(film.getDuration()));
     }
 }

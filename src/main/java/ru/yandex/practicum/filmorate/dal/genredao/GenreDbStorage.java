@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 @Primary
 @RequiredArgsConstructor
-public class GenreDbStorage implements GenreDAO {
+public class GenreDbStorage implements GenreDao {
 
     private final JdbcTemplate jdbcTemplate;
 

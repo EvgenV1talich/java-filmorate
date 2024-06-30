@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import java.util.Set;
 @Data
 @Builder
 @EqualsAndHashCode
-public class FilmDTO {
+public class FilmDto {
 
     private Integer id;
 
@@ -35,5 +35,5 @@ public class FilmDTO {
     private Set<Long> likes;
     private ArrayList<Genre> genres;
     @NotNull
-    private MPA mpa;
+    private Mpa mpa;
 }

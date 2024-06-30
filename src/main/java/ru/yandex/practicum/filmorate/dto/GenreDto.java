@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GenreDTO {
+public class GenreDto {
 
     private Integer id;
     private String name;

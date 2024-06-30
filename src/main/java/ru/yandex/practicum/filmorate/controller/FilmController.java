@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.dto.FilmDTO;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.service.film.FilmServiceImpl;
 
 import javax.validation.Valid;
@@ -27,19 +27,19 @@ public class FilmController {
     private final FilmServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<FilmDTO> createFilm(@RequestBody @Valid FilmDTO newFilm) {
+    public ResponseEntity<FilmDto> createFilm(@RequestBody @Valid FilmDto newFilm) {
         log.info("POST  '/films' createFilm {}.", newFilm.getName());
         return new ResponseEntity<>(service.createFilm(newFilm), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<FilmDTO> updateFilm(@RequestBody @Valid FilmDTO newFilm) {
+    public ResponseEntity<FilmDto> updateFilm(@RequestBody @Valid FilmDto newFilm) {
         log.info("PUT '/films' film ID {}.", newFilm.getId());
         return new ResponseEntity<>(service.updateFilm(newFilm), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<FilmDTO>> readAllFilmsList() {
+    public ResponseEntity<List<FilmDto>> readAllFilmsList() {
         log.info("GET '/films' all films");
         return new ResponseEntity<>(service.readAllFilms(), HttpStatus.OK);
     }
@@ -63,14 +63,14 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<List<FilmDTO>> getTopFilms(@RequestParam(required = false, defaultValue = "10") Long count) {
+    public ResponseEntity<List<FilmDto>> getTopFilms(@RequestParam(required = false, defaultValue = "10") Long count) {
         log.info("GET '/films/popular' highest likes {} films",
                 count);
         return new ResponseEntity<>(service.getTopFilms(count), HttpStatus.OK);
     }
 
     @GetMapping("{filmId}")
-    public ResponseEntity<FilmDTO> getFilm(@PathVariable Integer filmId) {
+    public ResponseEntity<FilmDto> getFilm(@PathVariable Integer filmId) {
         log.info("GET '/films/{}'  film_id {}.", filmId, filmId);
         return new ResponseEntity<>(service.getFilm(filmId), HttpStatus.OK);
     }

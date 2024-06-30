@@ -16,7 +16,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPA;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -148,7 +148,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setGenre(removeDublicates(genreStorage.getGenresByFilm(sqlRowSet.getInt("id"))));
         film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
         try {
-            MPA mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
+            Mpa mpa = mpaDBStorage.readById(sqlRowSet.getInt("id"));
             film.setMpa(mpa);
         } catch (Exception e) {
             log.info("Exception when create film in mapper.");

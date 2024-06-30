@@ -16,7 +16,7 @@ import java.util.Set;
 @Repository
 @Primary
 @RequiredArgsConstructor
-public class LikesDbStorage implements LikesDAO {
+public class LikesDbStorage implements LikesDao {
 
     private final JdbcTemplate jdbcTemplate;
 
