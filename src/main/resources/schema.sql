@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS MPA cascade;
+DROP TABLE IF EXISTS mpa cascade;
 DROP TABLE IF EXISTS films cascade;
 DROP TABLE IF EXISTS films_genres cascade;
 DROP TABLE IF EXISTS genres cascade;
