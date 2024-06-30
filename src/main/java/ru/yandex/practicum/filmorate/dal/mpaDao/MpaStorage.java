@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.mpadao;
+package ru.yandex.practicum.filmorate.dal.mpaDao;
 
 import ru.yandex.practicum.filmorate.model.Mpa;
 

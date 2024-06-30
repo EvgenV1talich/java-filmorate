@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.mpadao;
+package ru.yandex.practicum.filmorate.dal.mpaDao;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.likesdao;
+package ru.yandex.practicum.filmorate.dal.likesDao;
 
 import java.util.Set;
 

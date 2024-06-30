@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.genredao;
+package ru.yandex.practicum.filmorate.dal.genreDao;
 
 import ru.yandex.practicum.filmorate.model.Genre;
 

@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.service.likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dal.likesdao.LikesDbStorage;
+import ru.yandex.practicum.filmorate.dal.likesDao.LikesDbStorage;
 
 import java.util.Set;
 

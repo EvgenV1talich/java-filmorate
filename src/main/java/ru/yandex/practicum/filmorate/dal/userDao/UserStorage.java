@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.userdao;
+package ru.yandex.practicum.filmorate.dal.userDao;
 
 import ru.yandex.practicum.filmorate.model.User;
 

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.likesdao;
+package ru.yandex.practicum.filmorate.dal.likesDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

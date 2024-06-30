@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.filmdao;
+package ru.yandex.practicum.filmorate.dal.filmDao;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

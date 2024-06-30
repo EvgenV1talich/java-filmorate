@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.validators;
 
 import lombok.RequiredArgsConstructor;
-import ru.yandex.practicum.filmorate.dal.genredao.GenreDbStorage;
-import ru.yandex.practicum.filmorate.dal.mpadao.MpaDbStorage;
+import ru.yandex.practicum.filmorate.dal.genreDao.GenreDbStorage;
+import ru.yandex.practicum.filmorate.dal.mpaDao.MpaDbStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
