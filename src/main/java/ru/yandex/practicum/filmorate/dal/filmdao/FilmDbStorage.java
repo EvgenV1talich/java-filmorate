@@ -122,20 +122,25 @@ public class FilmDbStorage implements FilmStorage {
         String query = "SELECT * FROM films WHERE id = ?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, id);
         if (sqlRowSet.first()) {
-            Film film = new Film();
-            film.setId(sqlRowSet.getInt("id"));
-            film.setName(sqlRowSet.getString("name"));
-            film.setDescription(sqlRowSet.getString("description"));
-            film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());
-            film.setDuration(sqlRowSet.getInt("duration"));
-            film.setGenre(removeDublicates(genreStorage.getGenresByFilm(sqlRowSet.getInt("id"))));
-            film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
-            film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("mpa_id")));
-            log.debug("Get film {}.", id);
+            Film film = buildFilm(sqlRowSet, id);
             return film;
         } else {
             throw new FilmNotFoundException("Film not found!");
         }
+    }
+
+    private Film buildFilm(SqlRowSet sqlRowSet, Integer id) {
+        Film film = new Film();
+        film.setId(sqlRowSet.getInt("id"));
+        film.setName(sqlRowSet.getString("name"));
+        film.setDescription(sqlRowSet.getString("description"));
+        film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());
+        film.setDuration(sqlRowSet.getInt("duration"));
+        film.setGenre(removeDublicates(genreStorage.getGenresByFilm(sqlRowSet.getInt("id"))));
+        film.setLikesFromUsers(likeDBStorage.getLikerByFilmId(sqlRowSet.getInt("id")));
+        film.setMpa(mpaDBStorage.readById(sqlRowSet.getInt("mpa_id")));
+        log.debug("Get film {}.", id);
+        return film;
     }
 
     public Film mapToFilm(ResultSet sqlRowSet, int rowNum) throws SQLException {
