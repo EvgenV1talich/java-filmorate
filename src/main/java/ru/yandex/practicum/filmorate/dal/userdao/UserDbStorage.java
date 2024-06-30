@@ -127,13 +127,6 @@ public class UserDbStorage implements UserStorage {
         }
 
     }
-//    public List<User> getAllFriendsUser(Long id) {
-//        getUser(id); // для валидации
-//        String query = "SELECT * FROM users WHERE id IN (SELECT friendid FROM friends WHERE userid = ?)";
-//        List<User> friends = jdbcTemplate.query(query, this::mapToUser, id);
-//        log.debug("Получен список friendId друзей у User с id {}.", id);
-//        return friends;
-//    }
 
     @Override
     public void deleteUser(Long id) {

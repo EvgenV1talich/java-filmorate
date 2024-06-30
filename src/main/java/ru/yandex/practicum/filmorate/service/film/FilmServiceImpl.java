@@ -71,7 +71,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public void userLike(Integer idFilm, Long idUser) {
         filmStorage.getFilm(idFilm);
-        userService.getUserById(idUser); // для валидации
+        userService.getUserById(idUser);
         likeService.addLike(idFilm, idUser);
         log.debug("Add like user {} to film {}", idUser, idFilm);
     }

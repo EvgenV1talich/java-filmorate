@@ -49,7 +49,7 @@ public class InMemoryFilmStorage implements FilmStorage {
                     .toString());
             throw new FilmAlreadyExistsException("Ошибка добавления фильма");
         }
-        return null;
+        return film;
     }
 
     @Override

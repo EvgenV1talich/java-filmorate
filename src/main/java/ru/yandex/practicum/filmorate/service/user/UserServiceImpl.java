@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
         Set<Long> ids = new HashSet<>(userStorage.getUser(user1Id).getFriends());
         List<UserDTO> users = new ArrayList<>();
         ids.retainAll(userStorage.getUser(user2Id).getFriends());
-        log.debug("Получен список общих друзей у User с ID {} и User c ID {}.", user1Id, user2Id);
+        log.debug("Get same friends list user {} and user {}.", user1Id, user2Id);
         for (Long id : ids) {
             users.add(mapper.userToDTO(userStorage.getUser(id)));
         }

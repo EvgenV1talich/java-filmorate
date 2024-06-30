@@ -44,7 +44,6 @@ public class FilmDbStorage implements FilmStorage {
                 .withTableName("films")
                 .usingColumns("name", "description", "release_date", "duration", "mpa_id")
                 .usingGeneratedKeyColumns("id");
-        //TODO BUG
         Integer key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film)).intValue();
         film.setId(Integer.parseInt(String.valueOf(key)));
         film.setMpa(mpaDBStorage.readById(film.getMpa().getId()));
@@ -142,7 +141,6 @@ public class FilmDbStorage implements FilmStorage {
     public Film mapToFilm(ResultSet sqlRowSet, int rowNum) throws SQLException {
         Film film = new Film();
         film.setId(sqlRowSet.getInt("id"));
-        //TODO почему не достаётся имя???
         film.setName(sqlRowSet.getString("name"));
         film.setDescription(sqlRowSet.getString("description"));
         film.setReleaseDate(sqlRowSet.getDate("release_date").toLocalDate());
@@ -195,7 +193,6 @@ public class FilmDbStorage implements FilmStorage {
         temp.put("description", film.getDescription());
         temp.put("release_date", film.getReleaseDate());
         temp.put("duration", film.getDuration());
-        //TODO MAYBE BUG
         temp.put("mpa_id", film.getMpa().getId());
         return temp;
     }

@@ -66,7 +66,7 @@ public class UserController {
 
     @GetMapping("{id}/friends")
     public ResponseEntity<List<UserDTO>> readAllUserFriends(@PathVariable Long id) {
-        log.info("Получен GET запрос по эндпоинту '/users/{id}/friends' на получение всех друзей для user c ID {}.",
+        log.info("GET to '/users/{id}/friends' to get all friends id for user {}.",
                 id);
         return new ResponseEntity<>(userService.readAllFriendsByUserId(id), HttpStatus.OK);
     }
@@ -74,20 +74,20 @@ public class UserController {
     @GetMapping("{id}/friends/common/{otherId}")
     public ResponseEntity<List<UserDTO>> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         log.info(
-                "Получен GET запрос по эндпоинту '/users/{}/friends/common/{}' на получение всех общих друзей у Users c ID {} и {}.",
+                "GET to '/users/{}/friends/common/{}' to get all same friends ids between users {} and {}.",
                 id, otherId, id, otherId);
         return new ResponseEntity<>(userService.getSameFriendsList(id, otherId), HttpStatus.OK);
     }
 
     @GetMapping("{userId}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) {
-        log.info("Получен GET запрос по эндпоинту '/users/{userId}' на получение Users c ID {}", userId);
+        log.info("GET to '/users/{userId}' to get user ID={}", userId);
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        log.info("Получен DELETE запрос по эндпоинту '/users/{}' на удаление User c ID {}. ", userId, userId);
+        log.info("DELETE to '/users/{}' to delete user {}. ", userId, userId);
         userService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
