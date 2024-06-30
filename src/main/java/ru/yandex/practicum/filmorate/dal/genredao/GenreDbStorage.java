@@ -42,9 +42,9 @@ public class GenreDbStorage implements GenreDao {
         String sqlQuery = "SELECT * FROM genres ORDER BY id";
         log.debug("Все Genres получены.");
 
-        var v = jdbcTemplate.query(sqlQuery, this::mapToGenre);
+        List<Genre> genresFromRequest = jdbcTemplate.query(sqlQuery, this::mapToGenre);
 
-        return new ArrayList<>(v);
+        return genresFromRequest;
 
     }
 
