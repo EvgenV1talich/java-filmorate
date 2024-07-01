@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dal.filmDao;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,7 +21,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Set<Integer> filmIds = new TreeSet<>();
 
     @Override
-    public void createFilm(Film film) {
+    public Film createFilm(Film film) {
         if (film.getId() == null) {
             film.setId(generateId());
         }
@@ -48,10 +49,11 @@ public class InMemoryFilmStorage implements FilmStorage {
                     .toString());
             throw new FilmAlreadyExistsException("Ошибка добавления фильма");
         }
+        return film;
     }
 
     @Override
-    public void updateFilm(Film film) {
+    public Film updateFilm(Film film) {
         try {
             StringBuilder builder = new StringBuilder();
             log.info(builder
@@ -64,6 +66,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.error("Ошибка обновления фильма");
             throw new FilmNotFoundException("Ошибка обновления фильма");
         }
+        return film;
     }
 
     @Override
@@ -95,8 +98,18 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.containsKey(filmId);
     }
 
-    public HashMap<Integer, Film> getFilms() {
-        return films;
+    public List<Film> getFilms() {
+        return null;
+    }
+
+    @Override
+    public List<Film> getTopFilms(Long count) {
+        return null;
+    }
+
+    @Override
+    public Integer getFilmsCount() {
+        return null;
     }
 
     private Integer generateId() {

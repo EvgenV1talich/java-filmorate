@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
@@ -12,6 +14,7 @@ import java.util.TreeSet;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Film {
 
     private Integer id;
@@ -19,15 +22,35 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
+    private ArrayList<Genre> genre;
     private Set<Long> likesFromUsers;
+    private Mpa mpa;
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
+    public Film(Integer id,
+                String name,
+                String description,
+                LocalDate releaseDate,
+                Integer duration,
+                ArrayList<Genre> genre) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.genre = genre;
         this.likesFromUsers = new TreeSet<Long>();
+    }
+
+    public void setMpa(Mpa mpa) {
+        this.mpa = mpa;
+    }
+
+    public void setGenre(ArrayList<Genre> genre) {
+        this.genre = genre;
+    }
+
+    public void setLikesFromUsers(Set<Long> likesFromUsers) {
+        this.likesFromUsers = likesFromUsers;
     }
 
     @Override
@@ -52,6 +75,10 @@ public class Film {
                 ", releaseDate=" + releaseDate +
                 ", duration=" + duration +
                 '}';
+    }
+
+    public void addGenre(Genre newGenre) {
+        genre.add(newGenre);
     }
 
     public Integer getId() {
@@ -119,6 +146,7 @@ public class Film {
             return likesFromUsers.size();
         }
     }
+
 
     public void setDuration(Integer duration) {
         this.duration = duration;

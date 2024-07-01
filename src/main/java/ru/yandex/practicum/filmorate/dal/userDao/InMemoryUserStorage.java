@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dal.userDao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
     private Long lastGeneratedId = 1L;
 
     @Override
-    public void createUser(User user) {
+    public User createUser(User user) {
         generateId(user);
         try {
             log.info("Trying to create user (id = " + user.getId());
@@ -29,12 +29,14 @@ public class InMemoryUserStorage implements UserStorage {
             log.error("Error when creating new user (userId = " + user.getId() + ")");
             throw new UserAlreadyExistsException("Ошибка добавления пользователя");
         }
+        return user;
     }
 
     @Override
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         try {
             users.replace(user.getId(), user);
+            return user;
         } catch (UserNotFoundException ex) {
             log.error("Error when updating user");
             throw new UserNotFoundException("Error when updating user");
@@ -71,6 +73,16 @@ public class InMemoryUserStorage implements UserStorage {
         List<User> usersList = new ArrayList<>();
         usersList.addAll(users.values());
         return usersList;
+    }
+
+    @Override
+    public void userAddFriend(Long userId, Long friendId) {
+
+    }
+
+    @Override
+    public void userDeleteFriend(Long userId, Long friendId) {
+
     }
 
     public Set<Long> getUserIds() {

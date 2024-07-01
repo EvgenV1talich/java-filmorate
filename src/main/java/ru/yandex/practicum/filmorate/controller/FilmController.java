@@ -1,91 +1,85 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.FilmValidationException;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.validators.FilmValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
+import ru.yandex.practicum.filmorate.service.film.FilmServiceImpl;
 
-import java.util.Collection;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
+@RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
+    private final FilmServiceImpl service;
 
-    private final InMemoryFilmStorage filmStorage;
-    private final FilmService filmService;
-    private final InMemoryUserStorage userStorage;
+    @PostMapping
+    public ResponseEntity<FilmDto> createFilm(@RequestBody @Valid FilmDto newFilm) {
+        log.info("POST  '/films' createFilm {}.", newFilm.getName());
+        return new ResponseEntity<>(service.createFilm(newFilm), HttpStatus.CREATED);
+    }
 
-    @Autowired
-    public FilmController(InMemoryFilmStorage filmStorage, FilmService filmService, InMemoryUserStorage userStorage) {
-        this.filmStorage = filmStorage;
-        this.filmService = filmService;
-        this.userStorage = userStorage;
+    @PutMapping
+    public ResponseEntity<FilmDto> updateFilm(@RequestBody @Valid FilmDto newFilm) {
+        log.info("PUT '/films' film ID {}.", newFilm.getId());
+        return new ResponseEntity<>(service.updateFilm(newFilm), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<FilmDto>> readAllFilmsList() {
+        log.info("GET '/films' all films");
+        return new ResponseEntity<>(service.readAllFilms(), HttpStatus.OK);
+    }
+
+    @PutMapping("{id}/like/{userId}")
+    public ResponseEntity<?> addLikeFromUser(@PathVariable Integer id, @PathVariable Long userId) {
+        service.userLike(id, userId);
+        log.info(
+                "PUT  '/films/{}/like/{}' to add like to film (id {}) from user_id {}",
+                id, userId, id, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}/like/{userId}")
+    public ResponseEntity<?> deleteLike(@PathVariable Integer id, @PathVariable Long userId) {
+        service.deleteLikeById(id, userId);
+        log.info(
+                "DELETE '/films/{}/like/{}' to remove like from film_id {} from user_id{}",
+                id, userId, id, userId);
+        return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<FilmDto>> getTopFilms(@RequestParam(required = false, defaultValue = "10") Long count) {
+        log.info("GET '/films/popular' highest likes {} films",
+                count);
+        return new ResponseEntity<>(service.getTopFilms(count), HttpStatus.OK);
+    }
+
+    @GetMapping("{filmId}")
+    public ResponseEntity<FilmDto> getFilm(@PathVariable Integer filmId) {
+        log.info("GET '/films/{}'  film_id {}.", filmId, filmId);
+        return new ResponseEntity<>(service.getFilm(filmId), HttpStatus.OK);
     }
 
 
-    @GetMapping("/films")
-    public Collection<Film> getFilms() {
-        return filmStorage.getFilms().values();
+    @DeleteMapping("/{filmId}")
+    public ResponseEntity<?> deleteFilm(@PathVariable Integer filmId) {
+        log.info("DELETE '/films/{}' to remove film", filmId);
+        service.deleteFilm(filmId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PostMapping("/films")
-    public Film postFilm(@RequestBody Film film) {
-        if (!FilmValidator.validate(film)) {
-            log.error("Ошибка валидации фильма при запросе POST /films");
-            throw new FilmValidationException("Ошибка валидации фильма, проверьте данные!");
-        }
-        filmStorage.createFilm(film);
-        return film;
-    }
-
-    @PutMapping("/films")
-    public Optional<Film> putFilm(@RequestBody Film film) {
-        if (!FilmValidator.validate(film)) {
-            log.error("Ошибка валидации фильма при запросе PUT /users");
-            throw new FilmValidationException("Ошибка валидации фильма. Проверьте данные.");
-        }
-        if (!filmStorage.containsFilm(film.getId())) {
-            throw new FilmNotFoundException("Такой фильм не найден!");
-        } else {
-            filmStorage.getFilms().replace(film.getId(), film);
-            return Optional.of(filmStorage.getFilms().get(film.getId()));
-        }
-    }
-
-    @PutMapping("films/{id}/like/{userId}")
-    public void addLikeToFilm(@PathVariable Integer id, @PathVariable Long userId) {
-        filmService.addLikeToFilm(userId, id);
-    }
-
-    @DeleteMapping("films/{id}/like/{userId}")
-    public void removeLikeFromFilm(@PathVariable Integer id, @PathVariable Long userId) {
-        if (!filmStorage.containsFilm(id)) {
-            throw new FilmNotFoundException("Фильм с таким ID не найден!");
-        } else if (!userStorage.containsId(userId)) {
-            throw new UserNotFoundException("Пользователь с таким ID не найден!");
-        } else {
-            filmService.removeLikeToFilm(id, userId);
-        }
-    }
-
-    @GetMapping("/films/popular")
-    public List<Film> getPopularFilmsList(@RequestParam(name = "count") Optional<Integer> count) {
-        if (count.isEmpty()) {
-            return filmService.getMostPopularFilms(10);
-        } else if (count.get() > filmStorage.getFilms().size()) {
-            return filmService.getMostPopularFilms(filmStorage.getFilms().size());
-        } else {
-            return filmService.getMostPopularFilms(count.get());
-        }
-    }
-
 }
